@@ -1,3 +1,7 @@
+#ifndef SPARSEMATRIX_H
+#define SPARSEMATRIX_H
+
+
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -238,4 +242,4 @@ public:
     }
 };
 
-
+#endif // SPARSEMATRIX_H
