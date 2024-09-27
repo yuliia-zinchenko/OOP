@@ -1,244 +1,298 @@
 #ifndef SPARSEMATRIX_H
 #define SPARSEMATRIX_H
 
-
-#include <iostream>
-#include <vector>
 #include <tuple>
+#include <vector>
+#include <algorithm>
 #include <stdexcept>
 #include <string>
-#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <map> 
+#include <functional>
 
-template <typename A>
+template<typename, typename = void>
+struct is_output_streamable : std::false_type {};
+
+template<typename T>
+struct is_output_streamable<T, std::void_t<decltype(std::declval<std::ostream&>() << std::declval<T>())>> : std::true_type {};
+
+class MyType {
+public:
+    int value;
+    MyType() : value(0) {}
+    MyType(int v) : value(v) {}
+    bool operator==(const MyType& other) const {
+        return value == other.value;
+    }
+    bool operator!=(const MyType& other) const {
+        return value != other.value;
+    }
+    friend std::ostream& operator<<(std::ostream& out, const MyType& obj) {
+        out << obj.value;
+        return out;
+    }
+};
+
+std::ostream& operator<<(std::ostream& out, const std::vector<int>& vec) {
+    out << "{ ";
+    for (const auto& elem : vec) {
+        out << elem << " ";
+    }
+    out << "}";
+    return out;
+}
+
+template<typename A>
 class SparseMatrix {
 private:
     std::vector<std::tuple<std::size_t, std::size_t, A>> vectorIndexValue;
-    std::size_t rows, cols;
-    A defaultValue;
+    std::vector<A> values;        
+    std::vector<std::size_t> rowPtr; 
+    std::vector<std::size_t> colInd;
 
-public:
-    SparseMatrix(std::size_t r, std::size_t c, A defaultVal = A()) : rows(r), cols(c), defaultValue(defaultVal) {}
+    A defaultValue{};
+    std::size_t rowQuantity{};
+    std::size_t columnQuantity{};
 
-    explicit SparseMatrix(std::vector<std::tuple<std::size_t, std::size_t, A>> input) : defaultValue(A()) {
-        std::size_t rowTempQuantity = 0, colTempQuantity = 0;
-        for (auto& iter : input) {
-            std::size_t i = std::get<0>(iter);
-            std::size_t j = std::get<1>(iter);
-            if (rowTempQuantity < i) rowTempQuantity = i;
-            if (colTempQuantity < j) colTempQuantity = j;
-
-            if (std::get<2>(iter) != defaultValue) {
-                vectorIndexValue.push_back(iter);
-            }
-            else {
-                throw std::logic_error("Error! DefaultValue cannot be indexed!");
-            }
-        }
-        rows = rowTempQuantity + 1;
-        cols = colTempQuantity + 1;
-        std::sort(vectorIndexValue.begin(), vectorIndexValue.end());
+    static bool indexSortComparator(const std::tuple<std::size_t, std::size_t, A>& a,
+        const std::tuple<std::size_t, std::size_t, A>& b) {
+        return std::tie(std::get<0>(a), std::get<1>(a)) < std::tie(std::get<0>(b), std::get<1>(b));
     }
 
-    A& at(std::size_t row, std::size_t column) {
-        if (row >= rows || column >= cols) {
-            throw std::out_of_range("Error! Index went out of bounds!");
-        }
-        for (auto& iter : vectorIndexValue) {
-            if (std::get<0>(iter) == row && std::get<1>(iter) == column) {
-                return std::get<2>(iter);
+public:
+    SparseMatrix() : defaultValue{}, rowQuantity(0), columnQuantity(0) {}
+    SparseMatrix(const std::vector<std::pair<std::pair<std::size_t, std::size_t>, A>>& input) {
+        for (const auto& iter : input) {
+            if (iter.second != defaultValue) {
+                vectorIndexValue.push_back(std::make_tuple(std::get<0>(iter.first), std::get<1>(iter.first), iter.second));
+                rowQuantity = std::max(rowQuantity, std::get<0>(iter.first) + 1);
+                columnQuantity = std::max(columnQuantity, std::get<1>(iter.first) + 1);
             }
         }
-        throw std::out_of_range("Error! No value found at this index!");
+        std::sort(vectorIndexValue.begin(), vectorIndexValue.end(), indexSortComparator);
+        constructCSR(); 
+    }
+
+    void constructCSR() {
+        values.clear();
+        colInd.clear();
+        rowPtr.resize(rowQuantity + 1, 0);
+
+        for (const auto& elem : vectorIndexValue) {
+            std::size_t row = std::get<0>(elem);
+            std::size_t col = std::get<1>(elem);
+            A value = std::get<2>(elem);
+
+            values.push_back(value);
+            colInd.push_back(col);
+            rowPtr[row + 1]++;
+        }
+
+        // Cumulative sum for row pointers
+        for (std::size_t i = 0; i < rowPtr.size() - 1; i++) {
+            rowPtr[i + 1] += rowPtr[i];
+        }
+    }
+
+    void add(std::size_t row, std::size_t column, A data) {
+        if (data == defaultValue) {
+            throw std::logic_error("Error! Cannot add default value to sparse matrix!");
+        }
+        if (isAlreadyIndexed(row, column)) {
+            throw std::invalid_argument("Error! Element with this index already exists!");
+        }
+        vectorIndexValue.push_back(std::make_tuple(row, column, data));
+        rowQuantity = std::max(rowQuantity, row + 1);
+        columnQuantity = std::max(columnQuantity, column + 1);
+        std::sort(vectorIndexValue.begin(), vectorIndexValue.end(), indexSortComparator);
+
+        constructCSR();
     }
 
     const A& at(std::size_t row, std::size_t column) const {
-        if (row >= rows || column >= cols) {
-            throw std::out_of_range("Error! Index went out of bounds!");
+        if (row >= rowQuantity || column >= columnQuantity) {
+            throw std::out_of_range("Error! Index out of bounds!");
         }
         for (const auto& iter : vectorIndexValue) {
             if (std::get<0>(iter) == row && std::get<1>(iter) == column) {
                 return std::get<2>(iter);
             }
         }
-        return defaultValue; // Якщо значення немає, повертаємо значення за замовчуванням
+        return defaultValue;
     }
 
-    void set(std::size_t row, std::size_t column, const A& value) {
-        if (row >= rows || column >= cols) {
-            throw std::out_of_range("Error! Index went out of bounds!");
+    std::pair<std::size_t, std::size_t> find_if(const std::function<bool(const A&)>& condition) const {
+        for (const auto& iter : vectorIndexValue) {
+            if (condition(std::get<2>(iter))) {
+                return { std::get<0>(iter), std::get<1>(iter) };
+            }
         }
-        if (value == defaultValue) {
-            // Дозволяємо скидання значення до значення за замовчуванням
-            for (auto it = vectorIndexValue.begin(); it != vectorIndexValue.end(); ) {
-                if (std::get<0>(*it) == row && std::get<1>(*it) == column) {
-                    it = vectorIndexValue.erase(it);
+        throw std::runtime_error("No element satisfying the condition found in the matrix.");
+    }
+
+    std::pair<std::size_t, std::size_t> find(const A& value) const {
+        for (const auto& iter : vectorIndexValue) {
+            if (std::get<2>(iter) == value) {
+                return { std::get<0>(iter), std::get<1>(iter) };
+            }
+        }
+        std::ostringstream oss;
+        oss << value; 
+        throw std::runtime_error("Value " + oss.str() + " not found in the matrix.");
+    }
+
+    template<typename T>
+    void printValue(std::ostream& out, const T& value) const {
+        if constexpr (std::is_same<T, std::vector<int>>::value) { 
+            if (value.empty()) {
+                out << "{0} ";
+            }
+            else {
+                out << "{ ";
+                for (const auto& elem : value) {
+                    out << elem << " ";
+                }
+                out << "} ";
+            }
+        }
+        else if constexpr (std::is_same<T, MyType>::value) { 
+            out << value << " ";
+        }
+        else if constexpr (is_output_streamable<T>::value) { 
+            out << value << " ";
+        }
+        else {
+            throw std::logic_error("Unsupported type for output!");
+        }
+    }
+
+    void print(std::ostream& out = std::cout) {
+        for (std::size_t i = 0; i < rowQuantity; i++) {
+            for (std::size_t j = 0; j < columnQuantity; j++) {
+                const auto& value = at(i, j);
+                if (value == defaultValue) {
+                    out << "0 "; 
                 }
                 else {
-                    ++it;
+                    printValue(out, value); 
                 }
             }
-            return;
+            out << "\n"; 
         }
-
-        for (auto& iter : vectorIndexValue) {
-            if (std::get<0>(iter) == row && std::get<1>(iter) == column) {
-                std::get<2>(iter) = value;
-                return;
-            }
-        }
-
-        vectorIndexValue.push_back(std::make_tuple(row, column, value));
-        std::sort(vectorIndexValue.begin(), vectorIndexValue.end());
     }
 
-    SparseMatrix<A> operator+(const SparseMatrix<A>& rhs) const {
-        if (this->cols != rhs.cols || this->rows != rhs.rows) {
-            throw std::invalid_argument("Error! Can't sum matrices of different size!");
+    void transpose() {
+        std::vector<std::tuple<std::size_t, std::size_t, A>> transposed;
+        for (const auto& iter : vectorIndexValue) {
+            std::size_t row = std::get<0>(iter);
+            std::size_t column = std::get<1>(iter);
+            transposed.emplace_back(column, row, std::get<2>(iter));
         }
+        vectorIndexValue = std::move(transposed);
+        std::swap(rowQuantity, columnQuantity);
+        std::sort(vectorIndexValue.begin(), vectorIndexValue.end(), indexSortComparator);
+    }
 
-        SparseMatrix<A> result(this->rows, this->cols, defaultValue);
-
-        // Додаємо ненульові елементи з лівої матриці
-        for (const auto& i : this->vectorIndexValue) {
-            size_t row = std::get<0>(i);
-            size_t column = std::get<1>(i);
-            A data = std::get<2>(i);
-            try {
-                data += rhs.at(row, column); // Додаємо значення з правої матриці
-            }
-            catch (const std::out_of_range&) {
-                // Якщо елемента немає у правій матриці, просто беремо значення з лівої
-            }
-            if (data != defaultValue) {
-                result.set(row, column, data);
-            }
+    static std::vector<int> addVectors(const std::vector<int>& lhs, const std::vector<int>& rhs) {
+        if (lhs.size() != rhs.size()) {
+            throw std::invalid_argument("Vectors must be of the same length for addition!");
         }
-
-        // Додаємо ненульові елементи з правої матриці, які не були включені
-        for (const auto& i : rhs.vectorIndexValue) {
-            size_t row = std::get<0>(i);
-            size_t column = std::get<1>(i);
-            try {
-                this->at(row, column); // Перевіряємо, чи елемент з лівої матриці існує
-            }
-            catch (const std::out_of_range&) {
-                result.set(row, column, std::get<2>(i)); // Додаємо значення з правої матриці
-            }
+        std::vector<int> result(lhs.size());
+        for (std::size_t i = 0; i < lhs.size(); ++i) {
+            result[i] = lhs[i] + rhs[i];
         }
-
         return result;
     }
 
-    SparseMatrix<A> operator*(const SparseMatrix<A>& rhs) const {
-        if (this->cols != rhs.rows) {
-            throw std::invalid_argument("Error! Matrix1 column quantity != Matrix2 row quantity.");
+    SparseMatrix<A> operator+(const SparseMatrix<A>& rhs) const {
+        if (this->rowQuantity != rhs.rowQuantity || this->columnQuantity != rhs.columnQuantity) {
+            throw std::invalid_argument("Error! Matrices must have the same dimensions for addition!");
         }
 
-        SparseMatrix<A> result(this->rows, rhs.cols, defaultValue);
+        SparseMatrix<A> result;
+        result.rowQuantity = this->rowQuantity;
+        result.columnQuantity = this->columnQuantity;
 
-        // Перебираємо ненульові елементи лівої матриці
-        for (const auto& i : this->vectorIndexValue) {
-            size_t row = std::get<0>(i);
-            size_t col = std::get<1>(i);
-            A leftValue = std::get<2>(i);
+        for (const auto& elem : this->vectorIndexValue) {
+            std::size_t row = std::get<0>(elem);
+            std::size_t column = std::get<1>(elem);
+            A sumValue = std::get<2>(elem) + rhs.at(row, column);
+            if (sumValue != result.defaultValue) {
+                result.add(row, column, sumValue);
+            }
+        }
+        return result;
+    }
 
-            // Перебираємо ненульові елементи правої матриці
-            for (const auto& j : rhs.vectorIndexValue) {
-                size_t rhsRow = std::get<0>(j);
-                size_t rhsCol = std::get<1>(j);
-                A rightValue = std::get<2>(j);
+    void printCOO(std::ostream& out = std::cout) {
+        out << "COO Representation:\n";
+        for (const auto& elem : vectorIndexValue) {
+            out << "(" << std::get<0>(elem) << ", " << std::get<1>(elem) << ") -> " << std::get<2>(elem) << "\n";
+        }
+    }
 
-                // Перевіряємо, чи колонки лівої матриці збігаються з рядками правої матриці
-                if (col == rhsRow) {
-                    A product = leftValue * rightValue;
-                    if (product != defaultValue) {
-                        // Додаємо до результуючої матриці
-                        try {
-                            result.set(row, rhsCol, result.at(row, rhsCol) + product);
-                        }
-                        catch (const std::out_of_range&) {
-                            result.set(row, rhsCol, product); // Додаємо, якщо немає значення
-                        }
+    void printCSR(std::ostream& out = std::cout) {
+        out << "CSR Representation:\n";
+        out << "Values: ";
+        for (const auto& val : values) {
+            out << val << " ";
+        }
+        out << "\nColumn Indices: ";
+        for (const auto& col : colInd) {
+            out << col << " ";
+        }
+        out << "\nRow Pointers: ";
+        for (const auto& ptr : rowPtr) {
+            out << ptr << " ";
+        }
+        out << "\n";
+    }
+
+    SparseMatrix<A> operator*(const SparseMatrix<A>& rhs) const {
+        if (this->columnQuantity != rhs.rowQuantity) {
+            throw std::invalid_argument("Error! The number of columns in the first matrix must equal the number of rows in the second matrix for multiplication!");
+        }
+
+        SparseMatrix<A> result;
+        result.rowQuantity = this->rowQuantity;
+        result.columnQuantity = rhs.columnQuantity;
+
+        std::map<std::pair<std::size_t, std::size_t>, A> tempResult;
+
+        for (const auto& elemA : this->vectorIndexValue) {
+            std::size_t rowA = std::get<0>(elemA);
+            std::size_t columnA = std::get<1>(elemA);
+            A valueA = std::get<2>(elemA);
+            for (const auto& elemB : rhs.vectorIndexValue) {
+                std::size_t rowB = std::get<0>(elemB);
+                std::size_t columnB = std::get<1>(elemB);
+                A valueB = std::get<2>(elemB);
+                if (columnA == rowB) {
+                    A product = valueA * valueB;
+                    if (product != result.defaultValue) {
+                        tempResult[{rowA, columnB}] += product;  
                     }
                 }
             }
         }
 
-        return result;
-    }
-
-    //Пошук за значенням
-    template<typename Comparator>
-    const std::tuple<std::size_t, std::size_t, A>& find_if(const A& value, const Comparator& comparator) {
-        if (value == defaultValue) {
-            throw std::logic_error("Error! Unable to find default value!");
-        }
-        for (const auto& iter : vectorIndexValue) {
-            if (comparator(std::get<2>(iter), value)) {
-                return iter; // Повертаємо знайдений елемент
-            }
-        }
-        throw std::runtime_error("Element not found!"); // Кидаємо виняток, якщо не знайдено
-    }
-
-
-
-    // Пошук першого елемента за заданою умовою (lambda-функція)
-    std::tuple<std::size_t, std::size_t, A> find(const A& value) const {
-        for (const auto& iter : vectorIndexValue) {
-            if (std::get<2>(iter) == value) {
-                return iter; // Повертаємо знайдений елемент
-            }
-        }
-        throw std::runtime_error("Element not found!"); // Кидаємо виняток, якщо не знайдено
-    }
-
-    std::vector<A> multiplyVector(const std::vector<A>& vec) const {
-        if (cols != vec.size()) {
-            throw std::invalid_argument("Error! Matrix column count does not match vector size.");
-        }
-
-        std::vector<A> result(rows, defaultValue); // Результуючий вектор
-
-        for (const auto& iter : vectorIndexValue) {
-            std::size_t row = std::get<0>(iter);
-            std::size_t col = std::get<1>(iter);
-            A value = std::get<2>(iter);
-            result[row] += value * vec[col];
+        for (const auto& entry : tempResult) {
+            const auto& key = entry.first;
+            const auto& value = entry.second;
+            result.add(key.first, key.second, value);
         }
 
         return result;
     }
 
-    SparseMatrix<A> transpose() const {
-        SparseMatrix<A> transposed(cols, rows, defaultValue); // Створюємо транспоновану матрицю
-
-        // Перебираємо ненульові елементи поточної матриці
+    bool isAlreadyIndexed(std::size_t row, std::size_t column) const {
         for (const auto& iter : vectorIndexValue) {
-            std::size_t row = std::get<0>(iter);
-            std::size_t col = std::get<1>(iter);
-            A value = std::get<2>(iter);
-
-            // Додаємо значення у транспоновану матрицю
-            transposed.set(col, row, value);
-        }
-
-        return transposed; // Повертаємо транспоновану матрицю
-    }
-
-
-    void print(std::ostream& out = std::cout) const {
-        for (std::size_t i = 0; i < rows; ++i) {
-            for (std::size_t j = 0; j < cols; ++j) {
-                try {
-                    out << at(i, j) << " ";
-                }
-                catch (const std::out_of_range&) {
-                    out << defaultValue << " ";
-                }
+            if (std::get<0>(iter) == row && std::get<1>(iter) == column) {
+                return true;
             }
-            out << '\n'; // Використовуємо '\n' для пришвидшення виводу
         }
+        return false;
     }
 };
 
