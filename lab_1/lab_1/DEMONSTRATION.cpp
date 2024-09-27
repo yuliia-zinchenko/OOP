@@ -44,6 +44,7 @@ std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::vector<int>>> ge
 }
 
 void demoSparseMatrixInt() {
+    std::cout << "==== Demo: SparseLMatrix with integers ====\n";
     const std::size_t rows = 3;
     const std::size_t cols = 3;
     const int nonZeroCount = 5; 
@@ -103,6 +104,7 @@ void demoSparseMatrixInt() {
 }
 
 void demoSparseMatrixString() {
+    std::cout << "==== Demo: SparseMatrix with strings ====\n";
     std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::string>> input1 = {
         {{0, 0}, "A"},
         {{0, 1}, "BB"},
@@ -162,6 +164,7 @@ void demoSparseMatrixString() {
 }
 
 void demoSparseMatrixVector() {
+    std::cout << "==== Demo: SparseMatrix with int vector ====\n";
     const std::size_t rows = 3;
     const std::size_t cols = 3;
     const int nonZeroCount = 5;
@@ -286,14 +289,69 @@ void integrateVehiclesAndPaths() {
     std::cout << "Total travel time: " << distances[3] << " hours\n";
 }
 
+void demoSparseListInt() {
+    std::cout << "==== Demo: SparseList with integers ====\n";
 
+    SparseList<int> intSparseList(0); 
+
+    intSparseList.add(10, 2);
+    intSparseList.add(20, 5);
+    intSparseList.add(30, 7);
+
+    std::cout << "SparseList (int): \n";
+    std::cout << intSparseList << std::endl;
+    std::cout << "Element at index 5: " << intSparseList.at(5) << std::endl;
+    std::cout << "Element at index 3 (default): " << intSparseList.at(3) << std::endl;
+
+    const std::pair<int, size_t>* foundInt = intSparseList.find(20);
+    if (foundInt) {
+        std::cout << "Found value 20 at index " << foundInt->second << std::endl;
+    }
+    else {
+        std::cout << "Value 20 not found.\n";
+    }
+}
+
+void demoSparselistStr() {
+    std::cout << "\n==== Demo: SparseList with strings ====\n";
+
+    SparseList<std::string> stringSparseList("empty"); 
+
+    stringSparseList.add("Hello", 1);
+    stringSparseList.add("World", 4);
+    stringSparseList.add("Sparse", 6);
+
+    std::cout << "SparseList (string): \n";
+    std::cout << stringSparseList << std::endl;
+
+    std::cout << "Element at index 4: " << stringSparseList.at(4) << std::endl;
+    std::cout << "Element at index 3 (default): " << stringSparseList.at(3) << std::endl;
+
+    const std::pair<std::string, size_t>* foundString = stringSparseList.find("World");
+    if (foundString) {
+        std::cout << "Found string 'World' at index " << foundString->second << std::endl;
+    }
+    else {
+        std::cout << "'World' not found.\n";
+    }
+    const std::pair<std::string, size_t>* foundCondition = stringSparseList.find_if([](const std::pair<std::string, size_t>& pair) {
+        return pair.first.length() > 5;
+        });
+    if (foundCondition) {
+        std::cout << "Found string with more than 5 characters: " << foundCondition->first << " at index " << foundCondition->second << std::endl;
+    }
+    else {
+        std::cout << "No string with more than 5 characters found.\n";
+    }
+}
 
 int main() {
     integrateVehiclesAndPaths();
     //demoSparseMatrixInt();
     //demoSparseMatrixString();
     //demoSparseMatrixVector();
-
+    //demoSparseListInt();
+    //demoSparselistStr();
     return 0;
 }
 
