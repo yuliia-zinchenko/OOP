@@ -5,6 +5,8 @@
 #include <list>
 #include <utility>
 #include <stdexcept>
+#include <vector>
+
 
 template<typename T>
 class SparseList {
@@ -58,12 +60,13 @@ public:
     template<typename Predicate>
     const std::pair<T, size_t>* find_if(Predicate predicate) const {
         for (const auto& pair : listValueIndex) {
-            if (predicate(pair)) {
-                return &pair; 
+            if (predicate(pair)) { 
+                return &pair;
             }
         }
         return nullptr;
     }
+
 
     void print(std::ostream& out = std::cout) const {
         for (size_t i = 0; i < capacity; ++i) {
@@ -76,7 +79,7 @@ public:
                 }
             }
             if (!found) {
-                out << "[" << "index: " << i << " " << "data: " << defaultValue << "]\n";
+                out << "[" << "index: " << i << " " << ": " << defaultValue << "]\n";
             }
         }
     }

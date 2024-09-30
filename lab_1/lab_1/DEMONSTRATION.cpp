@@ -11,8 +11,10 @@
 #include <random>
 #include <ctime>
 #include <set>
+#include <unordered_set> 
+#include <utility>
 #include <cstdlib>
-
+#include <cmath>
 
 std::vector<std::pair<std::pair<std::size_t, std::size_t>, int>> generateRandomSparseMatrix(std::size_t rows, std::size_t cols, int nonZeroCount, int maxValue) {
     std::vector<std::pair<std::pair<std::size_t, std::size_t>, int>> matrix;
@@ -29,6 +31,31 @@ std::vector<std::pair<std::pair<std::size_t, std::size_t>, int>> generateRandomS
     return matrix;
 }
 
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator () (const std::pair<T1, T2>& pair) const {
+        auto hash1 = std::hash<T1>{}(pair.first);
+        auto hash2 = std::hash<T2>{}(pair.second);
+        return hash1 ^ hash2; // XOR
+    }
+};
+
+std::vector<std::pair<std::pair<std::size_t, std::size_t>, double>> generateRandomSparseMatrixDouble(std::size_t rows, std::size_t cols, int nonZeroCount, double maxValue) {
+    std::vector<std::pair<std::pair<std::size_t, std::size_t>, double>> sparseMatrix;
+
+    std::unordered_set<std::pair<std::size_t, std::size_t>, pair_hash> uniquePositions;
+    while (sparseMatrix.size() < nonZeroCount) {
+        std::size_t row = rand() % rows;
+        std::size_t col = rand() % cols;
+        auto pos = std::make_pair(row, col);
+        if (uniquePositions.insert(pos).second) { 
+            double value = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / maxValue)); 
+            value = std::round(value * 100.0) / 100.0; 
+            sparseMatrix.emplace_back(pos, value);
+        }
+    }
+    return sparseMatrix;
+}
 std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::vector<int>>> generateRandomSparseMatrixVectors(
     const std::size_t rows, const std::size_t cols, const int nonZeroCount) {
     std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::vector<int>>> matrix;
@@ -36,12 +63,39 @@ std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::vector<int>>> ge
     for (int i = 0; i < nonZeroCount; ++i) {
         std::size_t row = rand() % rows;
         std::size_t col = rand() % cols;
-        std::vector<int> value = { rand() % 10, rand() % 10 }; // Вектор з 2 випадкових значень
+        std::vector<int> value = { rand() % 10, rand() % 10 };
         matrix.emplace_back(std::make_pair(std::make_pair(row, col), value));
     }
 
     return matrix;
 }
+
+std::string generateRandomString(std::size_t length) {
+    std::string str;
+    static const char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (std::size_t i = 0; i < length; ++i) {
+        str += alphabet[std::rand() % (sizeof(alphabet) - 1)];
+    }
+    return str;
+}
+
+int generateRandomInt(int min, int max) {
+    return std::rand() % (max - min + 1) + min;
+}
+
+double generateRandomDouble(double min, double max) {
+    double value = min + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (max - min)));
+    return std::round(value * 100.0) / 100.0;
+}
+
+std::vector<int> generateRandomVectorList(int size, int min, int max) {
+    std::vector<int> vec(size);
+    for (int& elem : vec) {
+        elem = std::rand() % (max - min + 1) + min;
+    }
+    return vec;
+}
+
 
 void demoSparseMatrixInt() {
     std::cout << "==== Demo: SparseLMatrix with integers ====\n";
@@ -103,18 +157,79 @@ void demoSparseMatrixInt() {
 
 }
 
+void demoSparseMatrixDouble() {
+    std::cout << "==== Demo: SparseMatrix with doubles ====\n";
+    const std::size_t rows = 3;
+    const std::size_t cols = 3;
+    const int nonZeroCount = 5;
+    const double maxValue = 10.0;
+
+    std::vector<std::pair<std::pair<std::size_t, std::size_t>, double>> inputMatrix1 = generateRandomSparseMatrixDouble(rows, cols, nonZeroCount, maxValue);
+    std::vector<std::pair<std::pair<std::size_t, std::size_t>, double>> inputMatrix2 = generateRandomSparseMatrixDouble(rows, cols, nonZeroCount, maxValue);
+
+    SparseMatrix<double> matrix1(inputMatrix1);
+    SparseMatrix<double> matrix2(inputMatrix2);
+
+    std::cout << "Matrix 1:\n";
+    matrix1.print();
+    double valueToFind = 6.0;
+    try {
+        auto position = matrix1.find(valueToFind);
+        std::cout << "Search: value " << valueToFind << " found at position (in Matrix1): (" << position.first << ", " << position.second << ")\n";
+    }
+    catch (const std::runtime_error& e) {
+        std::cerr << e.what() << "\n";
+    }
+
+    try {
+        auto position = matrix1.find_if([](const double& value) {
+            return value > 5.0;
+            });
+        std::cout << "First value > 5 was found at position: ("
+            << position.first << ", " << position.second << ")\n";
+    }
+    catch (const std::runtime_error& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    std::cout << "\nMatrix 2:\n";
+    matrix2.print();
+
+    try {
+        std::cout << "\nValue at (0, 0) Matrix 1: " << matrix1.at(0, 0) << "\n";
+        std::cout << "Value at (2, 1) Matrix 2: " << matrix2.at(2, 1) << "\n";
+    }
+    catch (const std::out_of_range& e) {
+        std::cerr << e.what() << "\n";
+    }
+
+    SparseMatrix<double> resultSumMatrix = matrix1 + matrix2;
+    std::cout << "\nResult of Matrix 1 + Matrix 2:\n";
+    resultSumMatrix.print();
+
+    SparseMatrix<double> resultMult = matrix1 * matrix2;
+    std::cout << "\nResult of multiplication:\n";
+    resultMult.print();
+
+    matrix1.transpose();
+    std::cout << "\nTransposed Matrix 1:\n";
+    matrix1.print();
+}
+
 void demoSparseMatrixString() {
+    std::srand(static_cast<unsigned int>(std::time(0))); 
     std::cout << "==== Demo: SparseMatrix with strings ====\n";
+
     std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::string>> input1 = {
-        {{0, 0}, "A"},
-        {{0, 1}, "BB"},
-        {{2, 2}, "C"}
+        {{0, 0}, generateRandomString(1)},
+        {{0, 1}, generateRandomString(2)},
+        {{2, 2}, generateRandomString(1)}
     };
 
     std::vector<std::pair<std::pair<std::size_t, std::size_t>, std::string>> input2 = {
-    {{0, 0}, "A"},
-    {{1, 2}, "B"},
-    {{2, 1}, "C"}
+        {{0, 0}, generateRandomString(1)},
+        {{1, 2}, generateRandomString(1)},
+        {{2, 1}, generateRandomString(1)}
     };
 
     SparseMatrix<std::string> matrix1(input1);
@@ -132,9 +247,9 @@ void demoSparseMatrixString() {
 
     try {
         auto position = matrix1.find_if([](const std::string& value) {
-            return value.length() > 1; 
+            return value.length() > 1;
             });
-        std::cout << "First value lenght > 1 was found at possition: ("
+        std::cout << "First value length > 1 was found at position: ("
             << position.first << ", " << position.second << ")\n";
     }
     catch (const std::runtime_error& e) {
@@ -160,7 +275,6 @@ void demoSparseMatrixString() {
     matrix1.transpose();
     std::cout << "\nTransposed Matrix1 \n";
     matrix1.print();
-
 }
 
 void demoSparseMatrixVector() {
@@ -230,32 +344,28 @@ void integrateVehiclesAndPaths() {
     SparseMatrix<double> distanceMatrix({
     {{0, 1}, 100},  // Road
     {{1, 2}, 50},   // river
-    {{2, 3}, 200}   // Повітряний коридор
+    {{2, 3}, 200}   // air
         });
 
-    LandVehicle car(80);   // Наземний транспорт зі швидкістю 80 км/год
-    WaterVehicle boat(40); // Водний транспорт зі швидкістю 40 км/год
-    AirVehicle plane(600); // Повітряний транспорт зі швидкістю 600 км/год
+    LandVehicle car(80);   
+    WaterVehicle boat(40); 
+    AirVehicle plane(600); 
 
-    // Відстані для кожного транспорту
     std::map<std::pair<int, int>, double> weights;
-    weights[{0, 1}] = distanceMatrix.at(0, 1) / car.getSpeed();   // Дорога для наземного
-    weights[{1, 2}] = distanceMatrix.at(1, 2) / (boat.getSpeed() * 0.8); // Річка для водного
-    weights[{2, 3}] = distanceMatrix.at(2, 3) / (plane.getSpeed() * 0.9); // Повітря для повітряного
+    weights[{0, 1}] = distanceMatrix.at(0, 1) / car.getSpeed();   
+    weights[{1, 2}] = distanceMatrix.at(1, 2) / (boat.getSpeed() * 0.8); 
+    weights[{2, 3}] = distanceMatrix.at(2, 3) / (plane.getSpeed() * 0.9); 
 
     Graph g;
-    g.addEdge(0, 1, weights[{0, 1}]); // Дорога
-    g.addEdge(1, 2, weights[{1, 2}]); // Річка
-    g.addEdge(2, 3, weights[{2, 3}]); // Повітряний коридор
+    g.addEdge(0, 1, weights[{0, 1}]); 
+    g.addEdge(1, 2, weights[{1, 2}]);
+    g.addEdge(2, 3, weights[{2, 3}]); 
 
-    // Викликаємо алгоритм Дейкстри
     std::vector<double> distances;
     std::vector<std::size_t> previous;
 
-    // Отримуємо відстані та попередні вузли
     std::tie(distances, previous) = g.dijkstra(0, 4);
 
-    // Виводимо інформацію
     std::cout << "Calculating the shortest paths from point 0:\n";
 
     for (int i = 1; i < distances.size(); i++) {
@@ -290,16 +400,18 @@ void integrateVehiclesAndPaths() {
 }
 
 void demoSparseListInt() {
+    std::srand(static_cast<unsigned int>(std::time(0))); 
     std::cout << "==== Demo: SparseList with integers ====\n";
 
-    SparseList<int> intSparseList(0); 
+    SparseList<int> intSparseList(0);
 
-    intSparseList.add(10, 2);
-    intSparseList.add(20, 5);
-    intSparseList.add(30, 7);
+    intSparseList.add(generateRandomInt(1, 100), 2);  
+    intSparseList.add(generateRandomInt(1, 100), 5);  
+    intSparseList.add(generateRandomInt(1, 100), 7);  
 
     std::cout << "SparseList (int): \n";
     std::cout << intSparseList << std::endl;
+
     std::cout << "Element at index 5: " << intSparseList.at(5) << std::endl;
     std::cout << "Element at index 3 (default): " << intSparseList.at(3) << std::endl;
 
@@ -312,14 +424,40 @@ void demoSparseListInt() {
     }
 }
 
+void demoSparseListDouble() {
+    std::srand(static_cast<unsigned int>(std::time(0))); 
+    std::cout << "==== Demo: SparseList with doubles ====\n";
+
+    SparseList<double> doubleSparseList(0);
+
+    doubleSparseList.add(generateRandomDouble(1.0, 100.0), 2);
+    doubleSparseList.add(generateRandomDouble(1.0, 100.0), 5);
+    doubleSparseList.add(generateRandomDouble(1.0, 100.0), 7);
+
+    std::cout << "SparseList (double): \n";
+    std::cout << doubleSparseList << std::endl;
+
+    std::cout << "Element at index 5: " << doubleSparseList.at(5) << std::endl;
+    std::cout << "Element at index 3 (default): " << doubleSparseList.at(3) << std::endl;
+
+    const std::pair<double, size_t>* foundDouble = doubleSparseList.find(20.0);
+    if (foundDouble) {
+        std::cout << "Found value 20.0 at index " << foundDouble->second << std::endl;
+    }
+    else {
+        std::cout << "Value 20.0 not found.\n";
+    }
+}
+
 void demoSparselistStr() {
     std::cout << "\n==== Demo: SparseList with strings ====\n";
 
     SparseList<std::string> stringSparseList("empty"); 
 
-    stringSparseList.add("Hello", 1);
-    stringSparseList.add("World", 4);
-    stringSparseList.add("Sparse", 6);
+
+    stringSparseList.add(generateRandomString(5), 1);  
+    stringSparseList.add(generateRandomString(5), 4); 
+    stringSparseList.add(generateRandomString(6), 6);
 
     std::cout << "SparseList (string): \n";
     std::cout << stringSparseList << std::endl;
@@ -345,13 +483,54 @@ void demoSparselistStr() {
     }
 }
 
+void demoSparseListVectorInt() {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    std::cout << "==== Demo: SparseList with vectors of integers ====\n";
+
+    SparseList<std::vector<int>> vectorSparseList{ std::vector<int>() };
+
+    vectorSparseList.add(generateRandomVectorList(5, 1, 100), 2);
+    vectorSparseList.add(generateRandomVectorList(4, 1, 100), 5); 
+    vectorSparseList.add(generateRandomVectorList(6, 1, 100), 7); 
+
+    std::cout << "SparseList (vector<int>): \n";
+    std::cout << vectorSparseList << std::endl;
+
+    std::cout << "Element at index 5: ";
+    for (int val : vectorSparseList.at(5)) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Element at index 3 (default): ";
+    for (int val : vectorSparseList.at(3)) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    const std::pair<std::vector<int>, size_t>* foundCondition = vectorSparseList.find_if([](const std::pair<std::vector<int>, size_t>& pair) {
+        return pair.first.size() > 4; 
+        });
+
+    if (foundCondition) {
+        std::cout << "Found a vector with size > 4 at index " << foundCondition->second << std::endl;
+    }
+    else {
+        std::cout << "No vector with size > 4 found.\n";
+    }
+}
+
+
 int main() {
     integrateVehiclesAndPaths();
     //demoSparseMatrixInt();
+    //demoSparseMatrixDouble();
     //demoSparseMatrixString();
     //demoSparseMatrixVector();
     //demoSparseListInt();
+    //demoSparseListDouble();
     //demoSparselistStr();
+    //demoSparseListVectorInt();
     return 0;
 }
 
