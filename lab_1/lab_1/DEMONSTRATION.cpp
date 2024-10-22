@@ -523,8 +523,8 @@ void demoSparseListVectorInt() {
 
 int main() {
     integrateVehiclesAndPaths();
-    //demoSparseMatrixInt();
-    //demoSparseMatrixDouble();
+    demoSparseMatrixInt();
+    demoSparseMatrixDouble();
     //demoSparseMatrixString();
     //demoSparseMatrixVector();
     //demoSparseListInt();
