@@ -1,0 +1,60 @@
+{% extends 'book/base.html' %}
+
+{% block book_main %}
+<div class="dropdownSortby">
+    <button class="dropbtn">Sort by</button>
+    <div class="dropdown-content">
+        <a href="#">Titile</a>
+        <a href="#">Author</a>
+        <a href="#">Rating</a>
+        <a href="#">Date added</a>
+    </div>
+</div>
+
+<div class="content-grid">
+    <div class="book-card">
+        <div class="book-cover"></div>
+        <h3 class="book-title">The Great Gatsby</h3>
+        <p class="book-author">F. Scott Fitzgerald</p>
+        <div class="rating">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">☆</span>
+        </div>
+        <span class="status-badge completed">Completed</span>
+    </div>
+
+    <div class="book-card">
+        <div class="book-cover"></div>
+        <h3 class="book-title">1984</h3>
+        <p class="book-author">George Orwell</p>
+        <div class="rating">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+        </div>
+        <span class="status-badge reading">Currently Reading</span>
+    </div>
+
+    <div class="book-card">
+        <div class="book-cover"></div>
+        <h3 class="book-title">Dune</h3>
+        <p class="book-author">Frank Herbert</p>
+        <span class="status-badge wishlist">Wishlist</span>
+    </div>
+</div>
+
+<div class="quotes-section">
+    <h2>Favorite Quotes</h2>
+    <div class="quote">
+        "So we beat on, boats against the current, borne back ceaselessly into the past."
+        <p>- The Great Gatsby</p>
+    </div>
+</div>
+
+<div class="add-button">+</div>
+{% endblock %}

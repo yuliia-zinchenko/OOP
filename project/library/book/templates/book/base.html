@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'book/styles.css' %}">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Library Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">R&W</div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        <div class="dropdown">
+                            <button class="dropbtn">Books</button>
+                            <div class="dropdown-content">
+                                <a href="{% url 'book_main' %}">All Books</a>
+                                <a href="#">Currently Reading</a>
+                                <a href="#">Completed</a>
+                                <a href="#">Read later</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button class="dropbtn">Movies</button>
+                            <div class="dropdown-content">
+                                <a href="#">All Movies</a>
+                                <a href="#">Whatch History</a>
+                                <a href="#">Watch later</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown"></div>
+                        <button class="dropbtn">Profile</button>
+                    </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        {% block book_main %}{% endblock %}
+    </main>
+ </body>
+</html>
