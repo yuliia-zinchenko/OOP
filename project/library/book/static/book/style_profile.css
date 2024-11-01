@@ -1,0 +1,243 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-bg: #ecf0f1;
+    --white: #ffffff;
+    --primary: #4a90e2;
+    --background: #f5f7fa;
+    --text: #2c3e50;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    position: fixed;
+    display: flex;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    left: 0; 
+    top: 0; 
+    z-index: 1000; 
+}
+
+.container {
+    max-width: 100%; 
+    margin: 0 auto; 
+    padding: 0 20px; 
+}
+
+.header-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+
+
+.back_button {
+    position: relative;
+    display: inline-block;
+    background-color: transparent;
+    display: flex;
+    padding: 14px;
+    font-size: 16px;
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+} 
+
+.back_container {
+    position: relative; 
+    margin-right: auto;
+    display: inline-block;
+}
+
+
+.back_button:hover  {
+    color: var(--accent-color)
+} 
+
+.back_container::after {
+    content: '';
+    position: absolute;
+    right: 90%; 
+    top: 50%;
+    transform: translateY(-50%);
+    border: solid white;
+    border-width: 6px 6px 6px 0; 
+    border-color: transparent white transparent transparent; 
+}
+
+.back_container:hover::after {
+    border-color: transparent var(--accent-color) transparent transparent;
+}
+
+body {
+    padding-top: 80px;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profile-container {
+    background: white;
+    margin-top: 5%;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;  
+    object-fit: cover;
+    border: 3px solid var(--secondary-color);
+    transition: transform 0.3s ease;
+    min-width: 120px;  
+    max-width: 120px;  
+    min-height: 120px;
+    max-height: 120px;
+  }
+  
+  .profile-picture:hover {
+    transform: scale(1.05);
+  }
+  
+  .profile-info {
+    flex-grow: 1;
+  }
+  
+  .edit-name {
+    background: none;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text);
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .edit-name:focus {
+    outline: 2px solid var(--secondary-color);
+    border-radius: 5px;
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .stat-card {
+    background: var(--background);
+    display: flex; 
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 10px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .stat-number {
+    display: inline-flex; /* Додано */
+    align-items: center; /* Залишено */
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.stat-number svg {
+  margin-left: 8px; 
+  vertical-align: baseline; /* Змінено */
+} 
+
+  .login-section {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background: #357abd;
+  }
+  
+  .message {
+    color: var(--primary);
+    margin-top: 10px;
+    text-align: center;
+    min-height: 20px;
+  }
+  
+  #imageUpload {
+    display: none;
+  }
+  
+  .upload-label {
+    cursor: pointer;
+  }

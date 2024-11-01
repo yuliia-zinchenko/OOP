@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'book/styles.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'book/styles_main.css' %}"> 
+    <script src="{% static 'book/dialog.js' %}"></script>  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Library Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
@@ -13,7 +14,7 @@
         <div class="container header-content">
             <div class="logo">R&W</div>
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
+                <input type="text" placeholder="Search in my library...">
             </div>
             <nav>
                 <ul>
@@ -40,7 +41,7 @@
                     </li>
                     <li>
                         <div class="dropdown"></div>
-                        <button class="dropbtn">Profile</button>
+                        <a class="dropbtn" href="{% url 'profile_settings' %}">Profile</a>
                     </div>
                     </li>
                 </ul>

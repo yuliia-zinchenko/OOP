@@ -56,5 +56,24 @@
     </div>
 </div>
 
-<div class="add-button">+</div>
+<!-- <div class="add">
+    <a href="{% url 'add_book' %}" class="add-button">+</a>
+</div> -->
+
+<div class="add">
+    <a href="#" class="add-button" onclick="openDialog()">+</a>
+</div>
+
+<dialog id="myDialog">
+    <div class="dialog-content">
+        <span class="close" onclick="closeDialog()">&times;</span>
+        <h2>Add ...</h2>
+        <div class="dialog-buttons">
+            <a href="{% url 'add_book' %}" class="button">Book</a>
+            <a href="#" class="button">Movie</a>
+        </div>
+    </div>
+</dialog>
+
+
 {% endblock %}

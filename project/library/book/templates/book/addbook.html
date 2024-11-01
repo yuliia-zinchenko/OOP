@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'book/style_addbook.css' %}">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Library Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="back_container">
+                <a href="{% url 'book_main' %}" class="back_button">Back</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search book...">
+            </div>
+        </div>
+    </header>
+</body>
+</html>

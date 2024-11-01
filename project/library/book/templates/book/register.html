@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Login</label>
+                <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input name="name" type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="password1" class="form-label">Password 1</label>
+                <input name="password1" type="password" class="form-control" id="password1" required>
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Password 2</label>
+                <input name="password2" type="password" class="form-control" id="password2" required>
+            </div>
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                    {% for field, errors in form.errors.items %}
+                        <li>{{ field }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
