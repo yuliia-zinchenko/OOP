@@ -24,11 +24,16 @@
           </label>
           <input type="file" id="imageUpload" accept="image/*">
           <div class="profile-info">
-            <input type="text" class="edit-name" id="userName" value="John Doe" placeholder="Enter your name" style="display: none;">
-            <span id="displayName">{{ request.user }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16" onclick="editName()">
-                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-            </svg>
+            <label for="firstNameInput">First Name:</label>
+            <input type="text" class="edit-name" id="firstNameInput" value="{{ request.user.first_name }}" placeholder="Enter your first name" style="display: none;">
+        
+            <label for="lastNameInput">Last Name:</label>
+            <input type="text" class="edit-name" id="lastNameInput" value="{{ request.user.last_name }}" placeholder="Enter your last name" style="display: none;">
+        
+            <span id="displayName">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+        
+            <button onclick="editName()">Edit</button>
+            <button onclick="saveName()">Save</button>
         </div>
         
         </div>
@@ -53,24 +58,49 @@
             <div>Movies Watched</div>
           </div>
         </div>
-        
-        <!-- <div class="login-section">
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label for="currentPassword">Current Password</label>
-            <input type="password" id="currentPassword" placeholder="Enter current password">
-          </div>
-          <div class="form-group">
-            <label for="newPassword">New Password</label>
-            <input type="password" id="newPassword" placeholder="Enter new password">
-          </div>
-          <button onclick="updatePassword()">Update Password</button>
-        </div>
-        <div class="message" id="message"></div>
-      </div> -->
+        <script>
+          const csrfToken = '{{ csrf_token }}'; // Зберігаємо CSRF-токен у змінній
+      
+          function editName() {
+    const displayName = document.getElementById('displayName');
+    const firstNameInput = document.getElementById('firstNameInput');
+    const lastNameInput = document.getElementById('lastNameInput');
     
+    // Переключаємо видимість
+    if (firstNameInput.style.display === "none") {
+        firstNameInput.style.display = "block";
+        lastNameInput.style.display = "block";
+        displayName.style.display = "none";
+    } else {
+        firstNameInput.style.display = "none";
+        lastNameInput.style.display = "none";
+        displayName.style.display = "block";
+    }
+}
+
+function saveName() {
+    const firstNameInput = document.getElementById('firstNameInput');
+    const lastNameInput = document.getElementById('lastNameInput');
+
+    const firstName = firstNameInput.value;
+    const lastName = lastNameInput.value;
+
+    fetch("{% url 'profile_settings' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'  // Не забудьте включити CSRF-токен
+        },
+        body: `first_name=${firstName}&last_name=${lastName}`
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();  // Перезавантажити сторінку, щоб побачити зміни
+        }
+    });
+}
+      </script>
+      
+          
 </body>
 </html>
