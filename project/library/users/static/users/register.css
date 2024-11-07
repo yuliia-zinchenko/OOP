@@ -1,0 +1,145 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-bg: #ecf0f1;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 95%;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif; 
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(44, 62, 80, 0.5);
+}
+
+
+button[type="submit"] {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+button[type="submit"]:active {
+    background-color: var(--primary-color);
+}
+
+.alert-danger {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.alert-danger ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.alert-danger li {
+    margin-bottom: 5px;
+}
+
+.password-fields {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; 
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.password-field {
+    flex: 1; 
+
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(44, 62, 80, 0.5);
+}
+
+.password-fields .form-control {
+    width: calc(90%); 
+}
+
+.label_name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--secondary-color);
+    font-size: 15px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}

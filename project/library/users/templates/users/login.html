@@ -1,28 +1,62 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'users/login.css' %}">  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap">
+    <title>SignIn</title>
 </head>
 <body>
     <div class="container">
-    <form method="POST", action="{% url 'login' %}">
+      <div class="label_name">R&W</div>
+      <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
+    
+        <!-- Виведення глобальних помилок -->
+        {% if form.non_field_errors %}
+            <div class="error-messages">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Login</label>
-          <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <label for="exampleInputEmail1" class="form-label">Login</label>
+            <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            {% if form.username.errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
+    
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+            {% if form.password.errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for error in form.password.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
+    
         <button type="submit" class="btn btn-primary">Submit</button>
         <a href="{% url 'register' %}">Sign Up</a>
         <a href="#">Forgot password?</a>
-      </form>
+    </form>
     </div>
 </body>
 </html>

@@ -1,23 +1,32 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.edit import FormView
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileUpdateForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 
 
 def user_login(request):
-    if request.POST:
+    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
-            login(request, user=user)
+            login(request, user)
             return redirect('book_main')
-    return render(request, 'users/login.html')
+        else:
+            # Додаємо помилку в форму, якщо пароль неправильний
+            form = AuthenticationForm(data=request.POST)
+            form.add_error(None, 'Invalid username or password')  # Додаємо глобальну помилку
+            return render(request, 'users/login.html', {'form': form})  # Передаємо форму з помилкою назад
+
+    form = AuthenticationForm()
+    return render(request, 'users/login.html', {'form': form})
+
 
 def user_logout(request):
     logout(request)
@@ -35,8 +44,8 @@ class RegisterView(FormView):
         return super().form_valid(form)
     
 
-def profile_settings(request):
-    return render(request, 'users/profile.html')
+# def profile_settings(request):
+#     return render(request, 'users/profile.html')
 
 
 
