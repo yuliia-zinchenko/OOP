@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'users/password_change.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  </head>
+    <title>Change Password</title>
+</head>
+<body>
+    <div class="success-message">
+        <h2>Registration Successful!</h2>
+        <p>Dear <b>{{ username }}</b>, please go to your email <b>{{ email }}</b> inbox and click on the received activation link to confirm and complete your registration.</p>
+        <p><b>Note:</b> Check your spam folder if you don’t see the email.</p>
+        <a href="{% url 'book_main' %}" class="signin_button">Sing In</a>
+    </div>
+<style>
+    :root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-bg: #ecf0f1;
+    --white: #ffffff;
+}
+    .signin_button{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--secondary-color);
+    transition: color 0.3s ease;
+}
+</style>
+</body>
+</html>

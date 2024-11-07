@@ -6,6 +6,11 @@
     --light-bg: #ecf0f1;
     --white: #ffffff;
 }
+p{
+    color: green;
+    font-family: 'Montserrat', sans-serif;
+
+}
 
 body {
     background-color: var(--light-bg);
@@ -136,4 +141,9 @@ li {
     margin-top: 5px;
     font-size: 14px;
     display: block;  /* Додайте display:block, щоб переконатися, що елементи відображаються */
+}
+
+.alert.alert-error{
+    color:var(--accent-color)
+    
 }

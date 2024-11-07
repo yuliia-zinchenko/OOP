@@ -13,32 +13,7 @@
         <div class="label_name">R&W</div>
         <form method="POST">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="username" class="form-label">Login</label>
-                <input name="username" type="text" class="form-control" id="username" value="{{ request.POST.username }}" required>
-            </div>
-            <div class="mb-3">            
-                <label for="email" class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" id="email" value="{{ request.POST.email }}" required>
-                          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-                <label for="first_name" class="form-label">First name</label>
-                <input name="first_name" type="text" class="form-control" id="first_name" value="{{ request.POST.first_name }}" required>
-                <label for="last_name" class="form-label">Last name</label>
-                <input name="last_name" type="text" class="form-control" id="last_name" value="{{ request.POST.last_name }}" required>
-            </div>
-
-            <div class="mb-3 password-fields">
-                <div class="password-field">
-                    <label for="password1" class="form-label" >Password 1</label>
-                    <input name="password1" type="password" placeholder="Enter your password" class="form-control" id="password1" required>
-                </div>
-                <div class="password-field">
-                    <label for="password2" class="form-label" >Password 2</label>
-                    <input name="password2" type="password" placeholder="Repeat your password" class="form-control" id="password2" required>
-                </div>
-            </div>
+            
             {% if form.errors %}
                 <div class="alert alert-danger">
                     <ul>
@@ -48,7 +23,39 @@
                     </ul>
                 </div>
             {% endif %}
-            <button type="submit" class="btn btn-primary">Sing Up</button>
+
+            <!-- Поля для реєстрації -->
+            <div class="mb-3">
+                <label for="username" class="form-label">Login</label>
+                <input name="username" type="text" class="form-control" id="username" value="{{ request.POST.username }}" required>
+            </div>
+
+            <div class="mb-3">            
+                <label for="email" class="form-label">Email</label>
+                <input name="email" type="email" class="form-control" id="email" value="{{ request.POST.email }}" required>
+                <div id="emailHelp" class="form-text">Please, enter a valid email address</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First name</label>
+                <input name="first_name" type="text" class="form-control" id="first_name" value="{{ request.POST.first_name }}" required>
+
+                <label for="last_name" class="form-label">Last name</label>
+                <input name="last_name" type="text" class="form-control" id="last_name" value="{{ request.POST.last_name }}" required>
+            </div>
+
+            <div class="mb-3 password-fields">
+                <div class="password-field">
+                    <label for="password1" class="form-label">Password 1</label>
+                    <input name="password1" type="password" placeholder="Enter your password" class="form-control" id="password1" required>
+                </div>
+                <div class="password-field">
+                    <label for="password2" class="form-label">Password 2</label>
+                    <input name="password2" type="password" placeholder="Repeat your password" class="form-control" id="password2" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign Up</button>
             <a href="{% url 'login' %}">Sign in</a>
         </form>
     </div>

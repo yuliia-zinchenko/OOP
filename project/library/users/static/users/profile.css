@@ -184,7 +184,7 @@ body {
     flex-grow: 1;
   }
   
-  .edit-name {
+  /* .edit-name {
     font-family: 'Montserrat', sans-serif;
     background: none;
     border: none;
@@ -198,7 +198,7 @@ body {
     outline: 2px solid var(--secondary-color);
     border-radius: 5px;
     border: 1px solid #ccc; 
-  }
+  } */
   
   .stats {
     margin-top: 40px;
@@ -347,3 +347,6 @@ body {
   color: var(--accent-color);
 }
 
+.hidden {
+  display: none !important;
+}

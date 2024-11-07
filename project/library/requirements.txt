@@ -1,0 +1,3 @@
+six
+django
+django-crispy-forms

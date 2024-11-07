@@ -33,11 +33,11 @@
             <input type="file" id="imageUpload" accept="image/*">
             <div class="profile-info">
               <label for="firstNameInput"></label>
-              <input type="text" class="edit-name" id="firstNameInput" value="{{ request.user.first_name }}" placeholder="Enter your first name" style="display: none;">
+              <input type="text" class="edit-name" id="firstNameInput" value="{{ request.user.first_name }}" placeholder="Enter your first name" style="display: none;" maxlength="20" oninput="removeSpaces(this)">
           
               <label for="lastNameInput"></label>
-              <input type="text" class="edit-name" id="lastNameInput" value="{{ request.user.last_name }}" placeholder="Enter your last name" style="display: none;">
-          
+              <input type="text" class="edit-name" id="lastNameInput" value="{{ request.user.last_name }}" placeholder="Enter your last name" style="display: none;" maxlength="20" oninput="removeSpaces(this)">
+              <div id="error-message" style="color: red; display: none;">Please do not use spaces!</div>
               <span id="displayName">{{ request.user.first_name }} {{ request.user.last_name }}</span>
           
               <button id="editButton" onclick="editName()" style="display: inline-block;">
@@ -85,7 +85,18 @@
             </div>
           </div>
           <script>
+
             const csrfToken = '{{ csrf_token }}';
+            function removeSpaces(inputElement) {
+    // Перевіряємо, чи є пробіли
+    if (/\s/.test(inputElement.value)) {
+        // Якщо є пробіли, показуємо помилку
+        document.getElementById('error-message').style.display = 'block';
+    } else {
+        // Якщо немає пробілів, ховаємо помилку
+        document.getElementById('error-message').style.display = 'none';
+    }
+}
 function editName() {
     const displayName = document.getElementById('displayName');
     const firstNameInput = document.getElementById('firstNameInput');

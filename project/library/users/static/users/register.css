@@ -143,3 +143,9 @@ a:hover {
     color: var(--accent-color);
     text-decoration: underline;
 }
+
+.form-text {
+    font-size: 12px;
+    margin-top:-10px;
+    margin-bottom:10px;
+}
