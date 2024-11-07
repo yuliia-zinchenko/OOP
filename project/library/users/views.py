@@ -67,25 +67,20 @@ def user_logout(request):
 
 def user_login(request):
     if request.method == 'POST':
-        # Витягуємо введені дані
         username_or_email = request.POST.get('username_or_email')
         password = request.POST.get('password')
-        
-        # Перевіряємо, чи введено email чи username
         user = None
 
-        if '@' in username_or_email:  # Якщо введено email
+        if '@' in username_or_email: 
             try:
                 user = get_user_model().objects.get(email=username_or_email)
             except get_user_model().DoesNotExist:
                 user = None
-        else:  # Якщо введено username
+        else:
             try:
                 user = get_user_model().objects.get(username=username_or_email)
             except get_user_model().DoesNotExist:
                 user = None
-        
-        # Якщо користувач знайдений, перевіряємо пароль
         if user and user.check_password(password):
             login(request, user)
             return redirect('book_main')
@@ -103,21 +98,15 @@ def user_login(request):
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
-
-        # Перевірка форми
         if form.is_valid():
             email = form.cleaned_data.get('email')
-
-            # Перевіряємо, чи є користувач з таким email
             if get_user_model().objects.filter(email=email).exists():
                 form.add_error('email', "An account with this email already exists.")
                 return render(request, "users/register.html", {"form": form})
-
-            # Якщо email унікальний, зберігаємо користувача
             user = form.save(commit=False)
-            user.is_active = False  # Користувач не активований до підтвердження електронної пошти
+            user.is_active = False  
             user.save()
-            activateEmail(request, user, email)  # Відправка листа на email
+            activateEmail(request, user, email) 
             request.session['username'] = user.username
             request.session['email'] = user.email
             return redirect('registration_success')
@@ -141,14 +130,12 @@ def profile_settings(request):
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
-            form.save()  # Зберігаємо зміни
-            return redirect('profile_settings')  # Перенаправляємо назад на сторінку профілю
+            form.save() 
+            return redirect('profile_settings')
         else:
-            # Якщо форма не дійсна, показуємо помилки на сторінці
             return render(request, 'users/profile.html', {'form': form})
 
     else:
-        # Якщо це GET запит, заповнюємо форму поточними даними користувача
         form = ProfileUpdateForm(instance=request.user)
         return render(request, 'users/profile.html', {'form': form})
     
