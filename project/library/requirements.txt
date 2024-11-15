@@ -1,3 +1,4 @@
 six
 django
 django-crispy-forms
+requests

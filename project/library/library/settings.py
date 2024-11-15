@@ -124,6 +124,7 @@ LOGIN_REDIRECT_URL = 'book_main'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'book', 'static'),
     os.path.join(BASE_DIR, 'users', 'static'),
+
 ]
 
 STATIC_URL = '/static/'

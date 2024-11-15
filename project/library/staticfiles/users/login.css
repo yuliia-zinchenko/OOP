@@ -1,0 +1,149 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-bg: #ecf0f1;
+    --white: #ffffff;
+}
+p{
+    color: green;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: var(--white);
+    padding: 2em;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Вирівнювання форми */
+form {
+    /* display: flex; */
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Стиль для заголовку форми */
+form .form-label {
+    font-weight: bold;
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%; 
+}
+
+/* Стиль для полів вводу */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid var(--secondary-color);
+    padding: 12px;
+    font-family: 'Montserrat', sans-serif; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 80%; 
+    max-width: 300px; 
+    margin-bottom: 15px;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.2);
+}
+
+/* Стиль для кнопок */
+.btn-primary {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    color: var(--white);
+    width: 80%; /* Встановлюємо ширину для вирівнювання по центру */
+    max-width: 300px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+/* Стиль посилань */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* Стиль тексту підказки */
+.form-text {
+    font-size: 0.85em;
+    color: var(--secondary-color);
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif; 
+}
+
+.label_name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    color: var(--accent-color);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+li {
+    padding: 5px 0;
+}
+
+.error-messages {
+    color: var(--accent-color);
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 14px;
+    display: block;  /* Додайте display:block, щоб переконатися, що елементи відображаються */
+}
+
+.alert.alert-error{
+    color:var(--accent-color)
+    
+}

@@ -1,0 +1,45 @@
+{% extends 'book/search_base.html' %}
+
+{% block back_button %}
+    <a href="{% url 'book_search' %}" class="back_button">Back</a>
+{% endblock %}
+
+{% block book_content %}
+    <div class="book-detail">
+        <div class="book-cover">
+            {% if book.volumeInfo.imageLinks %}
+            {% load static %}
+                <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="{{ book.volumeInfo.title }}">
+            {% else %}
+                <img src="{% static 'book/media/default_book.png' %}" alt="{{ book.volumeInfo.title }}">
+            {% endif %}
+        </div>
+        <div class="book-info">
+            <h1>{{ book.volumeInfo.title }}</h1>
+            <p><strong>Author:</strong> 
+                {% if book.volumeInfo.authors %}
+                    {{ book.volumeInfo.authors|join:", " }}
+                {% else %}
+                    Unknown Author
+                {% endif %}
+            </p>
+            <p><strong>Year:</strong> 
+                {% if book.volumeInfo.publishedDate %}
+                    {{ book.volumeInfo.publishedDate|slice:":4" }}
+                {% else %}
+                    Unknown Year
+                {% endif %}
+            </p>
+            <p><strong>Description:</strong> {{ book.volumeInfo.description|striptags }}</p>
+
+            <p><strong>Genre:</strong> 
+                {% if book.volumeInfo.categories %}
+                    {{ book.volumeInfo.categories|join:", " }}
+                {% else %}
+                    Unknown Genre
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    {% endblock %}

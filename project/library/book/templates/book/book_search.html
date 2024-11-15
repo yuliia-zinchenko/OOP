@@ -1,0 +1,63 @@
+{% extends 'book/search_base.html' %}
+
+{% block back_button %}
+    <a href="{% url 'book_main' %}" class="back_button">Back</a>
+{% endblock %}
+
+{% block input_form %}
+<div class="search-bar">
+    <form method="get" action="{% url 'book_search' %}" class="book-search-form">    
+        {{ form.query }} 
+        <button class="search-button" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block book_content %}
+
+        {% if request.GET.query %}
+            <div class="content-grid">
+                {% if results %}
+                    {% for item in results %}
+                        <div class="book-card">
+                            <a href="{% url 'book_detail' item.id %}">
+                            {% if item.volumeInfo.imageLinks %}
+                                <div class="book-cover" style="background-image: url('{{ item.volumeInfo.imageLinks.thumbnail }}');"></div>
+                            {% else %}
+                            <div class="book-cover default-book-cover"></div>
+                            {% endif %}
+                            <h3 class="book-title">{{ item.volumeInfo.title }}</h3>
+                        </a>
+                            <p class="book-author">
+                                {% if item.volumeInfo.authors %}
+                                    {{ item.volumeInfo.authors|join:", " }}
+                                {% else %}
+                                    Unknown Author
+                                {% endif %}
+                            </p>
+                            <p class="book-year">
+                                {% if item.volumeInfo.publishedDate %}
+                                    {{ item.volumeInfo.publishedDate|slice:":4" }}
+                                {% else %}
+                                    Unknown Year
+                                {% endif %}
+                            </p>
+                            <p class="book-description">
+                                    {{ item.volumeInfo.description|truncatewords:20|striptags}}
+                            </p>
+                            <!-- <div class="preview-link">
+                                <a href="{{ item.volumeInfo.previewLink }}" target="_blank">Preview</a>
+                            </div> -->
+                        </div>
+                    {% endfor %}
+
+                {% else %}
+                    <p>No results found.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+{% endblock %}
