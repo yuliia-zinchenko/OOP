@@ -6,3 +6,5 @@ class BookSearchForm(forms.Form):
         'placeholder': 'Search for books...'
     }))
 
+
+

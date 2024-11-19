@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'book/book_search.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'book/book_detail.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Personal Library Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -16,10 +17,12 @@
                 {% block back_button %}{% endblock %}
             </div>
             {% block input_form %}{% endblock %}
+
         </div>
     </header>
     <main>
          {% block book_content %}{% endblock %}
     </main>
 </body>
+
 </html>

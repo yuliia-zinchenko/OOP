@@ -147,7 +147,7 @@ header {
 }
 
 
-.book-cover {
+.book-cover1 {
     background-image: url('book/media/default_book.jpg');
     width: 100%;
     height: 300px;
@@ -203,6 +203,12 @@ a {
     text-decoration: none;
 }
 
+.logo {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-right: 10% ;
+}
 
 
 

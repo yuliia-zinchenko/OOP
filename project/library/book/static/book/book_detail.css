@@ -30,6 +30,16 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.book-cover {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;
+    align-items: center; */
+
+}
+
 .book-cover img {
     width: 200px;
     height: 300px;
@@ -117,4 +127,93 @@ p {
     margin: 0; /* Видаляє зовнішні відступи */
     padding: 0; /* Видаляє внутрішні відступи */
     line-height: 1.5; /* Налаштовує висоту рядка */
+}
+
+.logo {
+    margin-left: 80%;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+
+ 
+.book-actions {
+    margin-top: 10%;
+    display: block;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+} 
+
+.action-button {
+    background-color:transparent;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--white);
+    border: none;
+    /* padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px; */
+    cursor: pointer;
+}
+
+/* .action-button:hover {
+    background-color: darken(var(--accent-color), 10%);
+} */
+
+/* .action-button:active {
+    transform: scale(0.95);
+} */
+
+.mark-as-read, .currently-reading, .read-later {
+    /* background-color: var(--accent-color); */
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    color: var(--white);
+    width: 80%;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.read-later{
+    background-color: rgb(255, 128, 147);
+}
+
+.currently-reading{
+    background-color: rgb(65, 105, 225);
+}
+
+.mark-as-read{
+   background-color:  rgb(40, 164, 40);
+}
+
+.mark-as-read:hover{
+    transform: scale(1.05);
+}
+
+.currently-reading:hover{
+    transform: scale(1.05);
+}
+
+.read-later:hover{
+    transform: scale(1.05);
+}
+
+.bi.bi-suit-heart {
+    margin-bottom: -2%;
+    margin-left: 0px;
+} 
+
+.bi.bi-clock {
+    margin-bottom: -2%;
+}
+
+.bi.bi-check-lg {
+    margin-bottom: -2%;  
 }

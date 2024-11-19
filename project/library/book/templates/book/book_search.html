@@ -26,7 +26,7 @@
                         <div class="book-card">
                             <a href="{% url 'book_detail' item.id %}">
                             {% if item.volumeInfo.imageLinks %}
-                                <div class="book-cover" style="background-image: url('{{ item.volumeInfo.imageLinks.thumbnail }}');"></div>
+                                <div class="book-cover1" style="background-image: url('{{ item.volumeInfo.imageLinks.thumbnail }}');"></div>
                             {% else %}
                             <div class="book-cover default-book-cover"></div>
                             {% endif %}

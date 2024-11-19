@@ -1,7 +1,8 @@
 from django.urls import path
 from book import views
 from django.contrib import admin
-
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -9,4 +10,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('search/', views.book_search, name='book_search'),
     path('book/<str:book_id>/', views.book_detail, name='book_detail'),
+    path('add-to-list/', views.add_to_list, name='add_to_list'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
