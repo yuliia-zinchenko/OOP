@@ -5,6 +5,7 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'book/styles_main.css' %}"> 
     <script src="{% static 'book/dialog.js' %}"></script>  
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Library Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
@@ -14,7 +15,19 @@
         <div class="container header-content">
             <div class="logo">R&W</div>
             <div class="search-bar">
-                <input type="text" placeholder="Search in my library...">
+                <form method="get"  action="{% url 'book_main' %}" class="book-search-form">
+                    <input 
+                        id="searchInput"
+                        type="text" 
+                        name="q" 
+                        placeholder="Search in my library..." 
+                        value="">
+                    <button class="search-button"  type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                </form>
             </div>
             <nav>
                 <ul>
@@ -22,10 +35,10 @@
                         <div class="dropdown">
                             <button class="dropbtn">Books</button>
                             <div class="dropdown-content">
-                                <a href="{% url 'book_main' %}">All Books</a>
-                                <a href="#">Currently Reading</a>
-                                <a href="#">Completed</a>
-                                <a href="#">Read later</a>
+                                <a href="{% url 'book_main' %}" {% if not status %}class="active"{% endif %}>All Books</a>
+                                <a href="?status=currently_reading" {% if status == 'currently_reading' %}class="active"{% endif %}>Currently Reading</a>
+                                <a href="?status=mark_as_read" {% if status == 'mark_as_read' %}class="active"{% endif %}>Completed</a>
+                                <a href="?status=read_later" {% if status == 'read_later' %}class="active"{% endif %}>Read Later</a>
                                 <a href="#">Recommended</a>
                             </div>
                         </div>
@@ -52,5 +65,40 @@
     <main class="container">
         {% block book_main %}{% endblock %}
     </main>
+    <script>
+// document.addEventListener("DOMContentLoaded", function () {
+//     const inputField = document.getElementById('searchInput');
+//     const form = document.querySelector('.book-search-form');
+    
+//     // Перевірка параметрів URL при завантаженні сторінки
+//     const urlParams = new URLSearchParams(window.location.search);
+    
+//     // Якщо немає параметра 'q', очищуємо поле
+//     if (!urlParams.has('q') || urlParams.get('q') === '') {
+//         inputField.value = ''; 
+//     }
+
+//     // Якщо є значення в localStorage, відновлюємо його в полі пошуку
+//     const searchQuery = localStorage.getItem('searchQuery');
+//     if (searchQuery) {
+//         inputField.value = searchQuery;
+//     }
+
+//     // Оновлюємо localStorage з поточним значенням пошуку
+//     form.addEventListener('submit', function () {
+//         localStorage.setItem('searchQuery', inputField.value); // Зберігаємо запит
+//     });
+
+//     // Очистка поля при переході назад (кнопка "Назад")
+//     window.addEventListener('popstate', function () {
+//         inputField.value = ''; // Очистка поля
+//     });
+// });
+window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            document.getElementById('searchInput').value = '';
+        }
+    });
+ </script>
  </body>
 </html>

@@ -108,10 +108,8 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
+TIME_ZONE = 'Europe/Kyiv'
+USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = 'login'  # URL для сторінки входу

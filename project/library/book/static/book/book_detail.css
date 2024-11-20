@@ -153,6 +153,7 @@ p {
     font-family: 'Montserrat', sans-serif;
     color: var(--white);
     border: none;
+    font-weight: 700;
     /* padding: 10px 20px;
     border-radius: 5px;
     font-size: 14px; */
@@ -182,15 +183,19 @@ p {
 }
 
 .read-later{
-    background-color: rgb(255, 128, 147);
+    /* color: var(--text-color); */
+    /* background-color: rgb(255, 128, 147); */
+    background-color: #f1c40f;
 }
 
 .currently-reading{
-    background-color: rgb(65, 105, 225);
+    /* background-color: rgb(65, 105, 225); */
+    background-color: #3498db;
 }
 
 .mark-as-read{
-   background-color:  rgb(40, 164, 40);
+   /* background-color:  rgb(40, 164, 40); */
+   background-color: #2ecc71;
 }
 
 .mark-as-read:hover{
@@ -208,6 +213,7 @@ p {
 .bi.bi-suit-heart {
     margin-bottom: -2%;
     margin-left: 0px;
+
 } 
 
 .bi.bi-clock {

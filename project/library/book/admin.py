@@ -6,7 +6,7 @@ admin.site.register(Name)
 # admin.site.register(UserBook)
 
 class UserBookAdmin(admin.ModelAdmin):
-    list_display = ( 'book_id','title', 'author', 'status', 'cover_image_url', 'added_at')
+    list_display = ( 'book_id','title', 'author', 'status', 'cover_image_url', 'added_at', 'last_updated')
     search_fields = ('title', 'author')
 
 admin.site.register(UserBook, UserBookAdmin)

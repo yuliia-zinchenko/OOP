@@ -17,14 +17,14 @@ class UserBook(models.Model):
         choices=[
             ('read_later', 'Read Later'),
             ('currently_reading', 'Currently Reading'),
-            ('mark_as_read', 'Mark as Read')
+            ('mark_as_read', 'Completed')
         ]
     )
     cover_image_url = models.URLField(blank=True, null=True)
-    
     added_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return self.title
+        return f"{self.title} by {self.author}"
     class Meta:
         unique_together = ('user', 'book_id') 
 
