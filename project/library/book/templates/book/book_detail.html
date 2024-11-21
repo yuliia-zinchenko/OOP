@@ -5,7 +5,6 @@
     
 {% endblock %}
 
- <!-- <a href="{% url 'book_search' %}" class="back_button">Back</a> -->
 
 
 {% block input_form %}
@@ -18,9 +17,12 @@
             {% if book.volumeInfo.imageLinks %}
             {% load static %}
                 <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="{{ book.volumeInfo.title }}">
-            {% else %}
-                <img src="{% static 'book/media/default_book.png' %}" alt="{{ book.volumeInfo.title }}">
+            {% else  %}
+
+            <div class="default-picture"></div>
+
             {% endif %}
+            
             <div class="book-actions">
                 <div class="read-later">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" stroke="currentColor" stroke-width="0.7" class="bi bi-suit-heart" viewBox="0 0 16 16">
@@ -42,35 +44,56 @@
                     <button class="action-button" id="currently-reading-{{ book.id }}">Currently Reading</button>
                 </div>
 
+
+
             </div>        
         </div>
 
 
         <div class="book-info">
+            {% if book.volumeInfo.title %}
+           <h1> {{ book.volumeInfo.title }}</h1>
+        {% elif book.title %}
+            <h1>{{ book.title }}</h1>
+           
+        {% endif %}
 
-            <h1>{{ book.volumeInfo.title }}</h1>
             <p><strong>Author:</strong> 
                 {% if book.volumeInfo.authors %}
                     {{ book.volumeInfo.authors|join:", " }}
+                {% elif book.author %}
+                    {{ book.author }}
                 {% else %}
                     Unknown Author
                 {% endif %}
             </p>
+            {% if book.volumeInfo.publishedDate or book.published_date %}
             <p><strong>Year:</strong> 
                 {% if book.volumeInfo.publishedDate %}
                     {{ book.volumeInfo.publishedDate|slice:":4" }}
-                {% else %}
-                    Unknown Year
+                {% elif book.published_date %}
+                    {{ book.published_date }}
                 {% endif %}
             </p>
-            <p><strong>Description:</strong> {{ book.volumeInfo.description|striptags }}</p>
+        {% endif %}
+        {% if book.volumeInfo.publishedDate or book.published_date %}
+        <p><strong>Description:</strong> 
+            {% if book.volumeInfo.description %}
+                {{ book.volumeInfo.description|striptags }}
+                {% elif book.description %}
+                {{ book.description }}
+            {% endif %}
+    {% endif %}
+
 
             <p><strong>Genre:</strong> 
                 {% if book.volumeInfo.categories %}
-                    {{ book.volumeInfo.categories|join:", " }}
-                {% else %}
-                    Unknown Genre
-                {% endif %}
+                {{ book.volumeInfo.categories|join:", " }}
+            {% elif book.genre %}
+                {{ book.genre }}
+            {% else %}
+                Unknown Genre
+            {% endif %}
             </p>
         </div>
     </div>
@@ -79,13 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.action-button');
     buttons.forEach(button => {
         button.addEventListener('click', function () {
-            console.log("Button ID:", this.id); // Лог ID для перевірки
+            console.log("Button ID:", this.id); 
             const parts = this.id.split('-');
             if (parts.length < 3) {
                 console.error("Invalid ID format for button:", this.id);
                 return;
             }
-            const bookId = parts[2]; // Отримуємо ID
+            const bookId = parts[2]; 
             const status = this.textContent.trim().toLowerCase().replace(/\s+/g, '_');
 
             const coverImageUrl = "{{ book.volumeInfo.imageLinks.thumbnail|default:'' }}";
@@ -93,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 book_id: bookId,
                 title: "{{ book.volumeInfo.title|default:'' }}",
                 author: "{{ book.volumeInfo.authors|join:', '|default:'' }}",
+                genre: "{{ book.volumeInfo.categories|join:', '|default:'' }}",
                 status: status,
                 cover_image_url: coverImageUrl
             };

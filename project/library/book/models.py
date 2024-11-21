@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Max
 
 class Name(models.Model):
     name = models.CharField(max_length=50)
@@ -12,6 +13,8 @@ class UserBook(models.Model):
     book_id = models.CharField(max_length=255)  
     title = models.CharField(max_length=50)
     author = models.CharField(max_length=255, null=True, blank=True)
+    genre = models.CharField(max_length=20, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=50,
         choices=[
@@ -23,6 +26,13 @@ class UserBook(models.Model):
     cover_image_url = models.URLField(blank=True, null=True)
     added_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    def save(self, *args, **kwargs):
+        self.title = self.title[:50]
+        self.genre = self.genre[:30]  
+        if not self.book_id:
+            max_id = UserBook.objects.aggregate(Max('id'))['id__max'] or 0
+            self.book_id = f"user-{max_id + 1}"
+        super().save(*args, **kwargs)
     def __str__(self):
         return f"{self.title} by {self.author}"
     class Meta:
