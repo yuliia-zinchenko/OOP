@@ -2,6 +2,17 @@
 {% load static %}
 
 {% block book_main %}
+<div class="quotes-section">
+    <h2>Your daily quote</h2>
+    <div class="quote">
+        {% if quote %}
+        <p>"{{ quote.text }}"</p>
+        <p>- {{ quote.author }} <em>{{ quote.book_title }}</em></p>
+    {% else %}
+        <p>No quotes available. Please come back later!</p>
+    {% endif %}
+    </div>
+</div>
 
 <div class="dropdownSortby">
     <button class="dropbtn">Sort by</button>
@@ -16,7 +27,6 @@
     {% if books %}
     {% for book in books %}
     <div class="book-card">
-        <!-- Перевірка наявності book_id для URL -->
         <a href="{% if book.book_id %}{% url 'book_detail' book.book_id %}{% else %}# {% endif %}">
             {% if book.cover_image_url %}
             <img src="{{ book.cover_image_url }}" alt="{{ book.title }}" class="default">
@@ -31,7 +41,7 @@
                 No title available
             {% endif %}
         </h3>
-        <p class="book-author">{{ book.author }}</p>
+        <p class="book-author">{{ book.author|slice:":50"  }}</p>
         <span class="status-badge {% if book.status == 'mark_as_read' %}completed{% elif book.status == 'currently_reading' %}reading{% else %}wishlist{% endif %}">
             {% if book.status == 'mark_as_read' %}
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
@@ -87,18 +97,16 @@
             const bookId = dialog.getAttribute("data-book-id");
         
             console.log(`/delete_book/${bookId}/`);
-        
-            // Виконання AJAX запиту для видалення
             fetch(`/delete_book/${bookId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCSRFToken()  // Передаємо CSRF токен
+                    'X-CSRFToken': getCSRFToken() 
                 }
             }).then(response => {
                 if (response.ok) {
                     alert('Book deleted successfully!');
-                    location.reload(); // Перезавантажуємо сторінку після видалення
+                    location.reload(); 
                 } else {
                     alert('Failed to delete book!');
                     return response.json().then(data => console.error('Error details:', data));
@@ -107,12 +115,8 @@
                 console.error('Error:', error);
                 alert('Something went wrong.');
             });
-        
-            // Закриваємо діалогове вікно
             closeDeleteDialog();
         }
-        
-        // Функція для отримання CSRF токену
         function getCSRFToken() {
             let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             return csrfToken;
@@ -125,13 +129,7 @@
     {% endif %}
 </div>
 
-<div class="quotes-section">
-    <h2>Favorite Quotes</h2>
-    <div class="quote">
-        "So we beat on, boats against the current, borne back ceaselessly into the past."
-        <p>- The Great Gatsby</p>
-    </div>
-</div>
+
 
 <div class="add">
     <a href="#" class="add-button" onclick="openDialog()">+</a>

@@ -5,19 +5,32 @@
 {% endblock %}
 
 {% block input_form %}
+
+
+<form method="get" action="{% url 'book_search' %}" class="book-search-form">
+    <select name="search_by" class="search-by">
+        <option value="intitle">Title</option>
+        <option value="inauthor">Author</option>
+        <option value="subject">Genre</option>
+    </select>
+    <input  type="text" name="query" placeholder="Enter your search">
+    <button class="search-button" type="submit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+    </button>
+</form>
+
+
+<!-- 
 <div class="search-bar">
     <form method="get" action="{% url 'book_search' %}" class="book-search-form">    
         {{ form.query }}  
         <button class="search-button" type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
+
         </button>
     </form>
-</div>
-<!-- <form method="GET" action="{% url 'manual_book_add' %}">
-    <button type="submit">Add Book Manually</button>
-</form> -->
+</div> -->
 
 <button  class="addmybook" onclick="openDialog()">Add my book +</button>
 <dialog id="myDialog">
@@ -58,13 +71,19 @@
 <script>
 function openDialog() {
     document.getElementById("myDialog").showModal();
-    document.body.classList.add("modal-open"); // Додає затемнення
+    document.body.classList.add("modal-open"); 
 }
 
 function closeDialog() {
     document.getElementById("myDialog").close();
-    document.body.classList.remove("modal-open"); // При закритті знімає затемнення
+    document.body.classList.remove("modal-open"); 
 }
+
+    function setSearchBy(criteria) {
+        document.getElementById('search_by').value = criteria;
+    }
+
+
 </script>
 
 
@@ -104,9 +123,6 @@ function closeDialog() {
                             <p class="book-description">
                                     {{ item.volumeInfo.description|truncatewords:20|striptags}}
                             </p>
-                            <!-- <div class="preview-link">
-                                <a href="{{ item.volumeInfo.previewLink }}" target="_blank">Preview</a>
-                            </div> -->
                         </div>
                     {% endfor %}
 

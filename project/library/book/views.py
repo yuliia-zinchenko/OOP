@@ -2,57 +2,34 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import BookSearchForm, ManualBookForm
 import requests
-from django.conf import settings
 from django.http import Http404
 from html import unescape
 import os
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserBook
+from .models import UserBook, Quote
+from datetime import date
 from django.db.models import Q
 import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
-from datetime import datetime
+from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info, get_daily_quote
+
 
 @login_required
-# def index(request):
-#     user = request.user
-#     books = UserBook.objects.filter(user=user)
-
-#     query = request.GET.get('q')
-#     if query:
-#         books = books.filter(
-#             Q(title__icontains=query) | Q(author__icontains=query)
-#         )
-
-#     status = request.GET.get('status')
-#     if status:
-#         books = books.filter(status=status)
-
-#     sort_by = request.GET.get('sort_by', 'date')
-#     if sort_by == 'title':
-#         books = books.order_by('title') 
-#     elif sort_by == 'author':
-#         books = books.order_by('author')  
-#     else:
-#         books = books.order_by('-last_updated') 
-
-#     return render(request, 'book/index.html', {
-#         'books': books,
-#         'sort_by': sort_by,
-#         'status': status,
-#         'query': query,
-#     })
-
-
 def index(request):
     user = request.user
-    query = request.GET.get('q', '').strip()  # Отримуємо пошуковий запит
-    sort_by = request.GET.get('sort_by', 'date')  # Тип сортування
-    status = request.GET.get('status')  # Фільтр за статусом
+    query = request.GET.get('q', '').strip()  
+    sort_by = request.GET.get('sort_by', 'date')  
+    status = request.GET.get('status') 
+    total_quotes = Quote.objects.count()
+    if total_quotes > 0:
+        quote = Quote.objects.all()[date.today().day % total_quotes] 
+    else:
+        quote = None
 
     books = UserBook.objects.filter(user=user).exclude(title__isnull=True).exclude(title__exact='')
 
@@ -76,22 +53,31 @@ def index(request):
         'sort_by': sort_by,
         'status': status,
         'query': query,
+        'quote': quote,
     })
-
-
 
 
 
 @login_required
 def book_search(request):
     results = []
-    form = BookSearchForm(request.GET) 
-    if request.method == "GET" and form.is_valid():
+    form = BookSearchForm(request.GET)
+    
+    if form.is_valid():
         query = form.cleaned_data['query']
+        search_by = form.cleaned_data['search_by']
         load_dotenv()
         api_key = os.getenv('api_key')
-        url = f'https://www.googleapis.com/books/v1/volumes?q={query}&langRestrict=en&key={api_key}'
-        response = requests.get(url)
+
+        url = f'https://www.googleapis.com/books/v1/volumes'
+        params = {
+            'q': f'{search_by}:{query}',
+            'langRestrict': 'en',
+            'key': api_key,
+            'maxResults': 40 
+        }
+
+        response = requests.get(url, params=params)
         
         if response.status_code == 200:
             data = response.json()
@@ -100,6 +86,7 @@ def book_search(request):
             print("Error:", response.status_code)
 
     return render(request, 'book/book_search.html', {'form': form, 'results': results})
+
 
 
 
@@ -135,23 +122,19 @@ def add_to_list(request):
         genre = data.get('genre')
         cover_image_url = data.get('cover_image_url', None) or "default_url"
         cover_image_url = unescape(cover_image_url)
-
         if not book_id or not status:
             return JsonResponse({'error': 'Invalid data'}, status=400)
 
-        # Перевірка, чи book_id починається з "user_"
-        if book_id.isdigit() and not book_id.startswith('user_'):
+        if book_id.isdigit() and not book_id.startswith('user-'):
             book_id = f"user-{book_id}"
 
         try:
             book = UserBook.objects.get(user=request.user, book_id=book_id)
-            # Якщо книга існує, оновлюємо її статус
             book.status = status
             book.last_updated = now()
             book.save()
             message = 'Book status updated successfully'
         except UserBook.DoesNotExist:
-            # Якщо книга не існує, створюємо нову
             book = UserBook.objects.create(
                 user=request.user,
                 book_id=book_id,
@@ -168,29 +151,21 @@ def add_to_list(request):
 
     return JsonResponse({'error': 'Unauthorized or invalid request'}, status=403)
 
-
-
-
-
-
-
 def update_status(request, book_id):
     if request.method == "POST":
         data = json.loads(request.body)
         book_id = data['book_id']
         status = data['status']
 
-        # Додаємо префікс до book_id, якщо він виглядає як число
         if book_id.isdigit():
             book_id = f"user_{book_id}"
 
         try:
-            # Шукаємо книгу з відповідним book_id
+
             book = UserBook.objects.get(book_id=book_id)
         except UserBook.DoesNotExist:
             return JsonResponse({"error": "Book not found"}, status=404)
 
-        # Оновлюємо статус книги
         book.status = status
         book.save()
 
@@ -224,7 +199,6 @@ def manual_book_add(request):
             if existing_book:
                 existing_book.status = status
                 existing_book.save()
-                message = f"Book already exists, status updated!"
             else:
                 book = UserBook(
                     user=request.user,
@@ -242,5 +216,22 @@ def manual_book_add(request):
 
     return render(request, 'book/index.html', {'form': form})
 
+def recommendations(request):
+    user = request.user
 
+    top_genres = get_top_genres(user)
+
+    recommended_books = get_recommendations_from_google_books(top_genres)
+
+    best_sellers = get_bestsellers_with_google_info() 
+
+    if not best_sellers:
+        error_message = 'No bestsellers found'
+    else:
+        error_message = None
+    return render(request, 'book/recommendations.html', {
+        'recommended_books': recommended_books,
+        'best_sellers': best_sellers,
+        'error_message': error_message,
+    })
 

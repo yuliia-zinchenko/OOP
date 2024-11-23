@@ -16,7 +16,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models.query_utils import Q
-from django.core.exceptions import ValidationError
+from book.models import UserBook
 
 def user_not_authenticated(function):
     def wrap(request, *args, **kwargs):
@@ -127,17 +127,26 @@ def registration_success(request):
 
 @login_required
 def profile_settings(request):
+    books_read_count = UserBook.objects.filter(user=request.user, status='mark_as_read').count()
+    print(f"Books read count for user {request.user}: {books_read_count}")
+
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save() 
             return redirect('profile_settings')
         else:
-            return render(request, 'users/profile.html', {'form': form})
+            return render(request, 'users/profile.html', {
+                'form': form,
+                'books_read_count': books_read_count 
+            })
 
     else:
         form = ProfileUpdateForm(instance=request.user)
-        return render(request, 'users/profile.html', {'form': form})
+        return render(request, 'users/profile.html', {
+            'form': form,
+            'books_read_count': books_read_count
+        })
     
 
 
@@ -203,4 +212,7 @@ def passwordResetConfirm(request, uidb64, token):
         messages.error(request, "Link is expired!")
     messages.error(request, 'Something went wrong')
     return redirect('login')
+
+
+
 

@@ -248,6 +248,11 @@ color: var(--accent-color)
 color: var(--accent-color)
 } 
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
 .dropbtn::after {
 content: '';
 position: absolute;
@@ -307,6 +312,9 @@ z-index: 1;
 border-radius: 8px;
 transition: all 0.3s ease;
 }
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
 .dropdown-content a {
 color: black;
@@ -329,6 +337,17 @@ display: block;
 .dropdownSortby:hover .dropdown-content {
 display: block;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 .header-content {
 display: flex;
@@ -567,3 +586,8 @@ a {
     fill: var(--accent-color); 
 }
 
+.messenge{
+    font-family: 'Libre Baskerville', serif;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}

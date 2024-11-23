@@ -139,24 +139,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Emailing settings
-# import os
-# from dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
-# SECRET_KEY = os.getenv('SECRET_KEY')
-# EMAIL_HOST = os.getenv('EMAIL_HOST')
-# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-# EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
+SECRET_KEY = os.getenv('SECRET_KEY')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_FROM = 'readandwatch.help@gmail.com'
-EMAIL_HOST_USER = 'readandwatch.help@gmail.com'  
-EMAIL_HOST_PASSWORD = 'jxfsyxafyhgaaoce'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-SECRET_KEY = 'slksd332jktrngb@_)#)@_dko)#Ifrjfi3495(#mk)'
+
 
 

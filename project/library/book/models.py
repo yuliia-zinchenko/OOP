@@ -12,8 +12,8 @@ class UserBook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_id = models.CharField(max_length=255)  
     title = models.CharField(max_length=50)
-    author = models.CharField(max_length=255, null=True, blank=True)
-    genre = models.CharField(max_length=20, null=True, blank=True)
+    author = models.CharField(max_length=250, null=True, blank=True)
+    genre = models.CharField(max_length=250, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=50,
@@ -28,7 +28,7 @@ class UserBook(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     def save(self, *args, **kwargs):
         self.title = self.title[:50]
-        self.genre = self.genre[:30]  
+        self.genre = self.genre[:250]  
         if not self.book_id:
             max_id = UserBook.objects.aggregate(Max('id'))['id__max'] or 0
             self.book_id = f"user-{max_id + 1}"
@@ -37,5 +37,14 @@ class UserBook(models.Model):
         return f"{self.title} by {self.author}"
     class Meta:
         unique_together = ('user', 'book_id') 
+
+
+class Quote(models.Model):
+    text = models.TextField()
+    book_title = models.CharField(max_length=255)
+    added_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.text} - ({self.book_title})"
 
 

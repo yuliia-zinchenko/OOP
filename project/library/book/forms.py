@@ -2,9 +2,12 @@ from django import forms
 
 
 class BookSearchForm(forms.Form):
-    query = forms.CharField(max_length=100, required=False, label='Search', widget=forms.TextInput(attrs={
-        'placeholder': 'Search by title, author or genre...'
-    }))
+    query = forms.CharField(required=True, max_length=100, label="Search")
+    search_by = forms.ChoiceField(
+        choices=[('intitle', 'Title'), ('inauthor', 'Author'), ('subject', 'Genre')],
+        required=True
+    )
+
 
 class ManualBookForm(forms.Form):
     STATUS_CHOICES = [
@@ -14,7 +17,7 @@ class ManualBookForm(forms.Form):
     ]
     title = forms.CharField(max_length=30, required=True, label="Title")
     author = forms.CharField(max_length=30, required=True, label="Author")
-    genre = forms.CharField(max_length=30, required=True, label="Genre")
+    genre = forms.CharField(max_length=50, required=True, label="Genre")
     status = forms.ChoiceField(choices=STATUS_CHOICES, required=True, label="Status")
 
 

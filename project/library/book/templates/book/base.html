@@ -9,6 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Library Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
 </head>
 <body>
     <header>
@@ -39,7 +44,7 @@
                                 <a href="?status=currently_reading" {% if status == 'currently_reading' %}class="active"{% endif %}>Currently Reading</a>
                                 <a href="?status=mark_as_read" {% if status == 'mark_as_read' %}class="active"{% endif %}>Completed</a>
                                 <a href="?status=read_later" {% if status == 'read_later' %}class="active"{% endif %}>Read Later</a>
-                                <a href="#">Recommended</a>
+                                <a href="{% url 'book_recommendations' %}">Recommended</a>
                             </div>
                         </div>
                     </li>
@@ -66,34 +71,6 @@
         {% block book_main %}{% endblock %}
     </main>
     <script>
-// document.addEventListener("DOMContentLoaded", function () {
-//     const inputField = document.getElementById('searchInput');
-//     const form = document.querySelector('.book-search-form');
-    
-//     // Перевірка параметрів URL при завантаженні сторінки
-//     const urlParams = new URLSearchParams(window.location.search);
-    
-//     // Якщо немає параметра 'q', очищуємо поле
-//     if (!urlParams.has('q') || urlParams.get('q') === '') {
-//         inputField.value = ''; 
-//     }
-
-//     // Якщо є значення в localStorage, відновлюємо його в полі пошуку
-//     const searchQuery = localStorage.getItem('searchQuery');
-//     if (searchQuery) {
-//         inputField.value = searchQuery;
-//     }
-
-//     // Оновлюємо localStorage з поточним значенням пошуку
-//     form.addEventListener('submit', function () {
-//         localStorage.setItem('searchQuery', inputField.value); // Зберігаємо запит
-//     });
-
-//     // Очистка поля при переході назад (кнопка "Назад")
-//     window.addEventListener('popstate', function () {
-//         inputField.value = ''; // Очистка поля
-//     });
-// });
 window.addEventListener('pageshow', function(event) {
         if (event.persisted) {
             document.getElementById('searchInput').value = '';

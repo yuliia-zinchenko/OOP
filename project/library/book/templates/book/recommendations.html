@@ -1,0 +1,43 @@
+{% extends 'book/base.html' %}
+{% load static %}
+
+{% block book_main %}
+<h1 class="messenge"> Reccomendations for you:</h1>
+<div class="content-grid">
+
+    {% if recommended_books %}
+        {% for book in recommended_books %}
+            <div class="book-card">
+                <a href="{% url 'book_detail' book.id%}">
+                <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                <h3 class="book-title">{{ book.title }}</h3>
+                <p class="book-author">{{ book.author|slice:":100"  }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>There is no reccomendations for you yet</p>
+    {% endif %}
+</div>
+
+
+<h1 class="messenge"> NYT Bestsellers</h1>
+
+<div class="content-grid">
+    {% if best_sellers %}
+        {% for book in best_sellers %}
+            <div class="book-card">
+                <a href="{% url 'book_detail' book.id %}">
+                    <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">{{ book.author }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}
