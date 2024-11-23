@@ -259,9 +259,9 @@ position: absolute;
 right: 90%; 
 top: 50%;
 transform: translateY(-50%);
-border: solid white;
+border: solid --light-bg;
 border-width: 6px 4px 0 4px; 
-border-color: white transparent transparent transparent; 
+border-color: --light-bg transparent transparent transparent; 
 }
 .dropdown:hover .dropbtn::after {
 border-color: var(--accent-color) transparent transparent transparent; 

@@ -102,7 +102,7 @@ function closeDialog() {
                             {% if item.volumeInfo.imageLinks %}
                                 <div class="book-cover1" style="background-image: url('{{ item.volumeInfo.imageLinks.thumbnail }}');"></div>
                             {% else %}
-                            <div class="book-cover default-book-cover"></div>
+                            <div class="default-picture"></div>
                             {% endif %}
                             <h3 class="book-title">{{ item.volumeInfo.title }}</h3>
                         </a>

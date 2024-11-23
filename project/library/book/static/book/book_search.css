@@ -438,3 +438,13 @@ ul.dropdown-menu {
     border-radius: 50px 0 0 50px; 
     font-family: 'Montserrat', sans-serif;
 }
+
+
+.default-picture{
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-image: url('/media/default_book.png');
+}
