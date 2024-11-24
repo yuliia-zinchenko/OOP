@@ -16,7 +16,7 @@ body {
 }
 
 
-.book-detail {
+.movie-detail {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -30,7 +30,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.book-cover {
+.movie-cover {
     width: 200px;
     height: 100%;
     display: flex;
@@ -40,7 +40,7 @@ body {
 
 }
 
-.book-cover img {
+.movie-cover img {
     
     width: 200px;
     height: 300px;
@@ -50,7 +50,7 @@ body {
     background-color: var(--light-bg);
 }
 
-.book-info {
+.movie-info {
     flex: 1;
     max-width: 600px;
     display: flex;
@@ -77,7 +77,7 @@ body {
     font-weight: 600;
 }
 
-.book-info p {
+.movie-info p {
     font-size: 16px;
     line-height: 1.5;
     /* margin: 5px 0; */
@@ -87,23 +87,23 @@ body {
     
 }
 
-.book-info strong {
+.movie-info strong {
     color: var(--secondary-color);
     font-weight: 600;
 }
 
-.book-info p:last-child {
+.movie-info p:last-child {
     margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
-    .book-detail {
+    .movie-detail {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
 
-    .book-info {
+    .movie-info {
         align-items: center;
         max-width: 100%;
     }
@@ -118,32 +118,28 @@ body {
         font-size: 24px;
     }
 
-    .book-header .book-year {
+    .book-header .movie-year {
         margin-top: 5px;
     }
 }
 
 
 p {
-    margin: 0; /* Видаляє зовнішні відступи */
-    padding: 0; /* Видаляє внутрішні відступи */
-    line-height: 1.5; /* Налаштовує висоту рядка */
+    margin: 0;
+    padding: 0; 
+    line-height: 1.5;
 }
 
 .logo {
-    text-decoration: none;
     margin-left: 80%;
-    color: var(--light-bg);
     font-family: 'Libre Baskerville', serif;
     font-size: 1.8rem;
     font-weight: 700;
-    margin-right: 7%;
 }
 
 
-
  
-.book-actions {
+.movie-actions {
     margin-top: 10%;
     display: block;
     top: 20px;
@@ -165,7 +161,7 @@ p {
     cursor: pointer;
 }
 
-.mark-as-read, .currently-reading, .read-later {
+.mark-aswathed,  .wath-later {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
     color: var(--white);
@@ -178,31 +174,23 @@ p {
     transition: background-color 0.3s ease;
 }
 
-.read-later{
+.wath-later{
     /* color: var(--text-color); */
     /* background-color: rgb(255, 128, 147); */
     background-color: #f1c40f;
 }
 
-.currently-reading{
-    /* background-color: rgb(65, 105, 225); */
-    background-color: #3498db;
-}
-
-.mark-as-read{
+.mark-aswatched{
    /* background-color:  rgb(40, 164, 40); */
    background-color: #2ecc71;
 }
 
-.mark-as-read:hover{
+.mark-aswatched:hover{
     transform: scale(1.05);
 }
 
-.currently-reading:hover{
-    transform: scale(1.05);
-}
 
-.read-later:hover{
+.watch-later:hover{
     transform: scale(1.05);
 }
 
@@ -212,20 +200,16 @@ p {
 
 } 
 
-.bi.bi-clock {
-    margin-bottom: -2%;
-}
-
 .bi.bi-check-lg {
     margin-bottom: -2%;  
 }
 
 
-.default-picture{
+.default-picture-movie{
     width: 200px;
     height: 300px;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-image: url('/media/default_book.png');
+    background-image: url('/media/default_picture_movie.png');
 }

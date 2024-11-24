@@ -131,15 +131,11 @@ p {
 }
 
 .logo {
-    text-decoration: none;
     margin-left: 80%;
-    color: var(--light-bg);
     font-family: 'Libre Baskerville', serif;
     font-size: 1.8rem;
     font-weight: 700;
-    margin-right: 7%;
 }
-
 
 
  

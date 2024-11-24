@@ -1,0 +1,132 @@
+{% extends 'book/base.html' %}
+{% load static %}
+
+{% block book_main %}
+
+<div class="quotes-section">
+    <h2>Your daily quote</h2>
+    <div class="quote">
+        {% if quote %}
+        <p>"{{ quote.text }}"</p>
+        <p>- {{ quote.author }} <em>{{ quote.book_title }}</em></p>
+    {% else %}
+        <p>No quotes available. Please come back later!</p>
+    {% endif %}
+    </div>
+</div>
+
+<div class="dropdownSortby">
+    <button class="dropbtn">Sort by</button>
+    <div class="dropdown-content">
+        <a href="?sort_by=title{% if status %}&status={{ status }}{% endif %}" {% if sort_by == 'title' %}class="active"{% endif %}>Title</a>
+        <a href="?sort_by=date{% if status %}&status={{ status }}{% endif %}" {% if sort_by == 'date' %}class="active"{% endif %}>Date added</a>
+    </div>
+</div>
+
+<div class="content-grid">
+    {% if movies %}
+    {% for movie in movies %}
+    <div class="book-card">
+        <a href="{% url 'movie_detail' movie.movie_id %}">
+        <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+        <h3 class="book-title">{{ movie.title }}</h3>
+        <p class="book-release">{{ movie.release_date|slice:":4" }}</p>
+    </a >
+        <span class="status-badge {% if movie.status == 'mark_as_watched' %}completed{% else %}wishlist{% endif %}">
+            {% if movie.status == 'mark_as_watched' %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+            </svg>
+            
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"/>
+            </svg>
+            {% endif %}
+            {{ movie.get_status_display }}
+        </span>
+        <p class="book-updated">{{ movie.last_updated|date:"d M Y" }}</p>
+        <div id="movie-{{ movie.movie_id }}" class="delete">
+            <button class="delete-button" onclick="openDeleteDialog('{{ movie.movie_id }}')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="gray" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+            </button>
+        </div>
+        <dialog id="deleteDialog">
+            <p>Are you sure you want to delete this item?</p>
+            <div class="dialog-buttons">
+                <button onclick="confirmDelete()">Delete</button>
+                <button onclick="closeDeleteDialog()">Cancel</button>
+            </div>
+        </dialog>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No movies match your search criteria.</p>
+    {% endif %}
+</div>
+
+
+<script>
+    function openDeleteDialog(movieId) {
+        console.log("Movie ID:", movieId); 
+        const dialog = document.getElementById("deleteDialog");
+        dialog.showModal(); 
+        dialog.setAttribute("data-movie-id", movieId);
+    }
+    
+    function closeDeleteDialog() {
+        const dialog = document.getElementById("deleteDialog");
+        dialog.close();
+    }
+    
+    function confirmDelete() {
+        const dialog = document.getElementById("deleteDialog");
+        const movieId = dialog.getAttribute("data-movie-id");
+    
+        console.log(`/delete_movie/${movieId}/`);
+        fetch(`/delete_movie/${movieId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken() 
+            }
+        }).then(response => {
+            if (response.ok) {
+                alert('Movie deleted successfully!');
+                location.reload(); 
+            } else {
+                alert('Failed to delete movie!');
+                return response.json().then(data => console.error('Error details:', data));
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong.');
+        });
+        closeDeleteDialog();
+    }
+    function getCSRFToken() {
+        let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        return csrfToken;
+    }
+    </script>
+
+<div class="add">
+    <a href="#" class="add-button" onclick="openDialog()">+</a>
+</div>
+
+<dialog id="myDialog">
+    <div class="dialog-content">
+        <span class="close" onclick="closeDialog()">&times;</span>
+        <h2>Add ...</h2>
+        <div class="dialog-buttons-add">
+            <a href="{% url 'book_search' %}" class="add-book">Book</a>
+            <a href="{% url 'movie_search' %}"  class="add-movie">Movie</a>
+            <a href="{% url 'TVshow_search' %}"  class="add-movie">TV - show</a>
+        </div>
+    </div>
+</dialog>
+
+
+{% endblock %}

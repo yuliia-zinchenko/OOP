@@ -78,6 +78,7 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
+    margin-bottom: 10%;
 }
 
 .book-card {
@@ -112,11 +113,6 @@ main {
     margin-bottom: 1rem;
 }
 
-.rating {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
 
 
 
@@ -403,8 +399,8 @@ dialog {
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    width: 350px;
-    height: 230px;
+    width: 400px;
+    height: 300px;
     max-width: 90%; 
     border-color: transparent;
     border-radius: 5px;
@@ -443,7 +439,7 @@ dialog {
     background-color:var(--secondary-color); 
     color: var(--white); 
     padding: 10px 20px; 
-    width: 100px;
+    width: 140px;
     margin: 7px 0; 
     text-decoration: none; 
     font-weight: 600;
@@ -461,8 +457,9 @@ padding: 14px;
 }
 
 img {
-    width: 100%;
+    width: 90%;
     height: 300px;
+    margin-left: 5%;
     background-color: var(--secondary-color);
     border-radius: 5px;
     margin-bottom: 1rem;

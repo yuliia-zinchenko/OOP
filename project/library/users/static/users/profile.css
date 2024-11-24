@@ -203,8 +203,9 @@ body {
   .stats {
     margin-top: 40px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+ 
     gap: 20px;
+    align-items: center;
     margin-bottom: 30px;
   }
   

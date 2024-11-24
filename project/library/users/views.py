@@ -17,6 +17,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models.query_utils import Q
 from book.models import UserBook
+from movie.models import Movie
+from TVshow.models import TVshow
 
 def user_not_authenticated(function):
     def wrap(request, *args, **kwargs):
@@ -128,7 +130,9 @@ def registration_success(request):
 @login_required
 def profile_settings(request):
     books_read_count = UserBook.objects.filter(user=request.user, status='mark_as_read').count()
-    print(f"Books read count for user {request.user}: {books_read_count}")
+    movies_watched_count = Movie.objects.filter(user=request.user, status='mark_as_watched').count()
+    shows_watched_count = TVshow.objects.filter(user=request.user, status='mark_as_watched').count()
+
 
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, instance=request.user)
@@ -138,14 +142,18 @@ def profile_settings(request):
         else:
             return render(request, 'users/profile.html', {
                 'form': form,
-                'books_read_count': books_read_count 
+                'books_read_count': books_read_count, 
+                'movies_watched_count': movies_watched_count,
+                'shows_watched_count': shows_watched_count,
             })
 
     else:
         form = ProfileUpdateForm(instance=request.user)
         return render(request, 'users/profile.html', {
             'form': form,
-            'books_read_count': books_read_count
+            'books_read_count': books_read_count,
+            'movies_watched_count': movies_watched_count,
+            'shows_watched_count': shows_watched_count,
         })
     
 

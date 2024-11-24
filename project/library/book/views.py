@@ -5,18 +5,20 @@ import requests
 from django.http import Http404
 from html import unescape
 import os
-from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
 from .models import UserBook, Quote
+from movie.models import Movie
 from datetime import date
 from django.db.models import Q
 import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
-from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info, get_daily_quote
+from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info
+from itertools import chain
+from TVshow.models import TVshow
 
 
 @login_required
@@ -31,16 +33,29 @@ def index(request):
     else:
         quote = None
 
+    # Фільтрація книг та фільмів
     books = UserBook.objects.filter(user=user).exclude(title__isnull=True).exclude(title__exact='')
+    movies = Movie.objects.filter(user=user)
 
-    if query: 
+    # Якщо вказано пошуковий запит
+    if query:
         books = books.filter(
             Q(title__icontains=query) | Q(author__icontains=query)
         )
+        movies = movies.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+        
+        # Об'єднати результати тільки для пошуку
+        results = sorted(
+            list(chain(books, movies)),
+            key=lambda x: x.title if hasattr(x, 'title') else '',
+        )
+    else:
+        # Якщо пошуку немає, просто відображати окремо
+        results = []
 
-    if status: 
-        books = books.filter(status=status)
-
+    # Сортування книг
     if sort_by == 'title':
         books = books.order_by('title')
     elif sort_by == 'author':
@@ -48,13 +63,21 @@ def index(request):
     elif sort_by == 'date':
         books = books.order_by('-last_updated')
 
+    # Фільтрація за статусом
+    if status:
+        books = books.filter(status=status)
+
     return render(request, 'book/index.html', {
-        'books': books,
+        'books': books,  
+        'movies': movies,  
+        'results': results, 
         'sort_by': sort_by,
         'status': status,
         'query': query,
         'quote': quote,
     })
+
+
 
 
 

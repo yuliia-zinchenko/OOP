@@ -1,7 +1,7 @@
 {% extends 'book/search_base.html' %}
 
 {% block back_button %}
-    <a href="{% url 'book_main' %}" class="back_button">Back</a>
+<a href="javascript:history.back()" class="back_button">Back</a>
 {% endblock %}
 
 {% block input_form %}
@@ -22,15 +22,6 @@
 </form>
 
 
-<!-- 
-<div class="search-bar">
-    <form method="get" action="{% url 'book_search' %}" class="book-search-form">    
-        {{ form.query }}  
-        <button class="search-button" type="submit">
-
-        </button>
-    </form>
-</div> -->
 
 <button  class="addmybook" onclick="openDialog()">Add my book +</button>
 <dialog id="myDialog">
