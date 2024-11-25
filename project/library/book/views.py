@@ -16,7 +16,7 @@ from django.db.models import Q
 import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
-from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info
+from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info, get_author_based_recommendations_with_api
 from itertools import chain
 from TVshow.models import TVshow
 
@@ -243,18 +243,21 @@ def recommendations(request):
     user = request.user
 
     top_genres = get_top_genres(user)
+    recommended_books = get_recommendations_from_google_books(top_genres, min_rating=4.0, max_results=5)
 
-    recommended_books = get_recommendations_from_google_books(top_genres)
+    author_based = get_author_based_recommendations_with_api(user)
 
     best_sellers = get_bestsellers_with_google_info() 
 
+    error_message = None
     if not best_sellers:
         error_message = 'No bestsellers found'
-    else:
-        error_message = None
+    
     return render(request, 'book/recommendations.html', {
         'recommended_books': recommended_books,
+        'author_based': author_based,
         'best_sellers': best_sellers,
         'error_message': error_message,
     })
+
 

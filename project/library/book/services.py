@@ -11,28 +11,59 @@ def get_top_genres(user, top_n=3):
                                   .order_by('-count')[:top_n]
     return [genre['genre'] for genre in top_genres]
 
-def get_recommendations_from_google_books(genres):
+from django.core.cache import cache
+
+
+def get_recommendations_from_google_books(genres, min_rating=4.0, max_results=10, cache_timeout=3600):
     load_dotenv()
     api_key = os.getenv('API_KEY')
     api_url = 'https://www.googleapis.com/books/v1/volumes'
 
     recommended_books = []
+
     for genre in genres:
-        response = requests.get(api_url, params={'q': f'subject:{genre}', 'key': api_key, 'maxResults': 5})
+        # Перевірити, чи є дані в кеші
+        cache_key = f"recommendations_{genre}_{min_rating}"
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            print(f"Using cached data for genre: {genre}")
+            recommended_books.extend(cached_data)
+            continue
+
+        # Якщо немає в кеші, робимо запит до API
+        response = requests.get(api_url, params={
+            'q': f'subject:{genre}+averageRating>={min_rating}',
+            'orderBy': 'relevance',
+            'langRestrict': 'en',
+            'key': api_key,
+            'maxResults': max_results
+        })
+
         if response.status_code == 200:
             data = response.json()
             books = data.get('items', [])
-            for book in books:
-                volume_info = book.get('volumeInfo', {})
-                recommended_books.append({
-                    'id': book.get('id'), 
-                    'title': volume_info.get('title', 'Unknown Title'),
-                    'author': ', '.join(volume_info.get('authors', ['Unknown Author'])),
+            books_data = [
+                {
+                    'id': book.get('id'),
+                    'title': book.get('volumeInfo', {}).get('title', 'Unknown Title'),
+                    'author': ', '.join(book.get('volumeInfo', {}).get('authors', ['Unknown Author'])),
                     'genre': genre,
-                    'cover_image_url': volume_info.get('imageLinks', {}).get('thumbnail', ''),
-                    'link': volume_info.get('infoLink', '#'),
-                })
+                    'cover_image_url': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', ''),
+                    'link': book.get('volumeInfo', {}).get('infoLink', '#'),
+                }
+                for book in books
+            ]
+
+            # Зберігаємо результати в кеш
+            cache.set(cache_key, books_data, timeout=cache_timeout)
+            recommended_books.extend(books_data)
+        else:
+            print(f"API Error: {response.status_code}, {response.text}")
+
     return recommended_books
+
+
 
 
 def get_best_sellers():
@@ -101,3 +132,78 @@ def get_daily_quote():
         }
     else:
         return None
+    
+
+def get_author_based_recommendations(user):
+    favorite_authors = UserBook.objects.filter(user=user).exclude(author__isnull=True).exclude(author__exact='').values_list('author', flat=True).distinct()
+
+    author_recommendations = UserBook.objects.filter(author__in=favorite_authors).exclude(user=user)
+
+
+    recommendations = author_recommendations 
+
+    return recommendations.distinct()
+
+def search_books_by_author(author_name):
+    url = f"https://www.googleapis.com/books/v1/volumes?q=inauthor:{author_name}"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        books_data = response.json()
+        return [
+            {
+                'id': item.get('id'), 
+                "title": item.get("volumeInfo", {}).get("title", ""),
+                "author": ", ".join(item.get("volumeInfo", {}).get("authors", [])),
+                "description": item.get("volumeInfo", {}).get("description", ""),
+                'cover_image_url': item.get("volumeInfo", {}).get('imageLinks', {}).get('thumbnail', ''),
+                "genre": item.get("volumeInfo", {}).get("categories", [])[0] if item.get("volumeInfo", {}).get("categories") else "Unknown",
+            }
+            for item in books_data.get("items", [])
+        ]
+    return []
+
+def get_author_based_recommendations_with_api(user):
+
+    favorite_authors = (
+        UserBook.objects.filter(user=user)
+        .exclude(author__isnull=True)
+        .exclude(author__exact='')
+        .values('author')
+        .annotate(author_count=Count('author'))
+        .filter(author_count__gte=2)
+        .values_list('author', flat=True)
+    )
+
+    author_recommendations = []
+    for author in favorite_authors:
+        books_by_author = (
+            UserBook.objects.filter(author=author)
+            .exclude(user=user)
+            .order_by('title')[:3]
+        )
+        author_recommendations.extend(books_by_author)
+
+    api_recommendations = []
+    for author in favorite_authors:
+        api_books = search_books_by_author(author)[:3] 
+        api_recommendations.extend(api_books)
+
+
+    recommendations = list(author_recommendations) + api_recommendations
+
+
+    return recommendations
+
+
+
+
+
+# def get_search_based_recommendations(user):
+#     recent_searches = UserSearchHistory.objects.filter(user=user).order_by('-timestamp')[:5]  
+#     recommendations = []
+#     for search in recent_searches:
+#         recommendations += UserBook.objects.filter(title__icontains=search.query)[:3] 
+#     return recommendations
+
+
