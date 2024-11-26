@@ -11,7 +11,7 @@ from .models import Movie
 from django.views.decorators.csrf import csrf_exempt
 from .services import get_movie_from_api, get_movies_by_genre
 from django.http import Http404
-from book.models import Quote
+from book.models import Quote, RecentlyViewed
 from django.core.cache import cache
 from book.utils import add_to_recently_viewed
 
@@ -20,6 +20,7 @@ from book.utils import add_to_recently_viewed
 @login_required
 def movie_search(request):
     results = []
+    recently_viewed_movies = RecentlyViewed.objects.filter(user=request.user, content_type='movie').order_by('-viewed_at')[:20]
     form_data = request.GET.get('query', '')  
 
     if form_data:
@@ -37,7 +38,7 @@ def movie_search(request):
         else:
             print("API Error:", response.status_code)
 
-    return render(request, 'movie/movie_search.html', {'results': results, 'query': form_data})
+    return render(request, 'movie/movie_search.html', {'results': results, 'query': form_data, 'recently_viewed_movies': recently_viewed_movies})
 
 
 
@@ -55,10 +56,10 @@ def movie_detail(request, movie_id):
             'overview': movie.description,
             'poster_path': movie.poster_url,
         }
-        # Викликаємо add_to_recently_viewed з даними з бази
-        add_to_recently_viewed(user, 'movie', movie.movie_id, movie.title)
+        # cover_image_url = movie.poster_url
+        # add_to_recently_viewed(user, 'movie', movie.movie_id, movie.title, cover_image_url)
     else:
-        # Якщо фільм не знайдений у базі, беремо дані з API
+
         api_data = get_movie_from_api(movie_id)
 
         if api_data is None:
@@ -71,8 +72,8 @@ def movie_detail(request, movie_id):
             'overview': api_data.get('overview', 'Опис недоступний'),
             'poster_path': f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None,
         }
-        # Викликаємо add_to_recently_viewed з даними з API
-        add_to_recently_viewed(user, 'movie', movie_data['id'], movie_data['title'])
+        cover_image_url = f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None
+        add_to_recently_viewed(user, 'movie', movie_data['id'], movie_data['title'], cover_image_url)
 
     return render(request, 'movie/movie_detail.html', {'movie': movie_data})
 

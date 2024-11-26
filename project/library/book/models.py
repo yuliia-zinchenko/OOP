@@ -54,6 +54,7 @@ class RecentlyViewed(models.Model):
     content_type = models.CharField(max_length=10, choices=[('book', 'Book'), ('movie', 'Movie'), ('show', 'Show')])
     item_id = models.CharField(max_length=20)  # ID книги/фільму/серіалу
     title = models.CharField(max_length=255)
+    cover_image_url = models.URLField(blank=True, null=True)
     viewed_at = models.DateTimeField(default=now)
 
     class Meta:

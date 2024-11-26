@@ -140,6 +140,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+CRONJOBS = [
+    ('0 0 * * *', 'cleanup.cron.CleanRecentlyViewedCronJob'),
+]
 
 
 # Default primary key field type

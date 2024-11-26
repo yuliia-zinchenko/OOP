@@ -49,6 +49,24 @@
             <p>No results found.</p>
         {% endif %}
     </div>
+    {% else %}
+    <div class="recently-viewed">
+        <h3 style="text-decoration: underline;">Recently Viewed</h3>
+        <div class="content-grid">
+            {% for item in recently_viewed_movies %}
+                <div class="book-card">
+                    <a href="{% url 'movie_detail' item.item_id %}">
+                        {% if item.cover_image_url %}
+                            <div class="book-cover1" style="background-image: url('{{ item.cover_image_url }}');"></div>
+                        {% else %}
+                            <div class="default-picture"></div>
+                        {% endif %}
+                        <h3 class="book-title">{{ item.title }}</h3>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endif %}
 
 {% endblock %}

@@ -136,23 +136,39 @@ header {
     fill: var(--accent-color); 
 }
 
-.content-grid {
+ .content-grid {
+    margin-right: 3%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat( auto-fill, minmax(200px, 1fr)); /* Установка кількості колонок з мінімальною шириною */
     gap: 20px;
     padding: 20px;
-    margin: 0, auto;
+    margin: 0 auto; 
+    justify-content: flex-start; /* Вирівнює контент по лівому краю */
+    max-width: 100%;
+
 }
+
 
 .book-card {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    width: 200px;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     transition: transform 0.3s ease;
+    width: 200px; 
+}
+
+
+.recently-viewed{
+    margin-top: 3%;
+    margin-left: 4%;
+}
+
+.add-my-book{
+    margin-top: 2%;
+    margin-left: 4%;
 }
 
 .book-card:hover {

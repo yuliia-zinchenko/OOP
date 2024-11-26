@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserBook, Quote
+from .models import UserBook, Quote, RecentlyViewed
 from movie.models import Movie
 from datetime import date
 from django.db.models import Q
@@ -18,7 +18,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
 from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info, get_author_based_recommendations_with_api
 from itertools import chain
-from TVshow.models import TVshow
 from .utils import add_to_recently_viewed
 
 
@@ -85,6 +84,7 @@ def index(request):
 @login_required
 def book_search(request):
     results = []
+    recently_viewed_books = RecentlyViewed.objects.filter(user=request.user, content_type='book').order_by('-viewed_at')[:20]
     form = BookSearchForm(request.GET)
     
     if form.is_valid():
@@ -109,7 +109,7 @@ def book_search(request):
         else:
             print("Error:", response.status_code)
 
-    return render(request, 'book/book_search.html', {'form': form, 'results': results})
+    return render(request, 'book/book_search.html', {'form': form, 'results': results, 'recently_viewed_books': recently_viewed_books})
 
 
 
@@ -123,7 +123,7 @@ def book_detail(request, book_id):
         except UserBook.DoesNotExist:
             raise Http404("User book not found")
 
-        add_to_recently_viewed(user, 'book', book.id, book.title)
+        # add_to_recently_viewed(user, 'book', book.id, book.title)
 
         return render(request, 'book/book_detail.html', {'book': book})
 
@@ -132,9 +132,9 @@ def book_detail(request, book_id):
         raise Http404("Book not found")
 
     book_data = response.json()
-
+    cover_image_url = book_data.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', None)
     title = book_data.get('volumeInfo', {}).get('title', 'Unknown Title')
-    add_to_recently_viewed(user, 'book', book_id, title)
+    add_to_recently_viewed(user, 'book', book_id, title, cover_image_url)
 
     return render(request, 'book/book_detail.html', {'book': book_data})
 

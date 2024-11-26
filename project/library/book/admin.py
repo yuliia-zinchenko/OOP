@@ -18,5 +18,5 @@ class QuoteAdmin(admin.ModelAdmin):
 admin.site.register(Quote, QuoteAdmin)
 
 class RecentlyViewedAdmin(admin.ModelAdmin):
-    list_display = ( 'user', 'item_id','content_type','title', 'viewed_at')
+    list_display = ( 'user', 'item_id','content_type','title', 'viewed_at', 'cover_image_url')
 admin.site.register(RecentlyViewed, RecentlyViewedAdmin)

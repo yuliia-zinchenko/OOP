@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import os
 import requests
-from book.models import Quote
+from book.models import Quote, RecentlyViewed
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from dotenv import load_dotenv
@@ -20,6 +20,7 @@ from book.utils import add_to_recently_viewed
 @login_required
 def TVshow_search(request):
     results = []
+    recently_viewed_shows = RecentlyViewed.objects.filter(user=request.user, content_type='show').order_by('-viewed_at')[:20]
     form_data = request.GET.get('query', '').strip() 
 
     if form_data:
@@ -36,7 +37,7 @@ def TVshow_search(request):
         else:
             print("API Error:", response.status_code)
 
-    return render(request, 'TVshow/TVshow_search.html', {'results': results, 'query': form_data})
+    return render(request, 'TVshow/TVshow_search.html', {'results': results, 'query': form_data, 'recently_viewed_shows': recently_viewed_shows})
 
 
 @login_required
@@ -72,8 +73,8 @@ def show_detail(request, show_id):
             'poster_path': f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None,
         }
 
-
-    add_to_recently_viewed(user, 'show', show_data['id'], show_data['name'])
+    cover_image_url=f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None
+    add_to_recently_viewed(user, 'show', show_data['id'], show_data['name'], cover_image_url)
 
     return render(request, 'TVshow/show_detail.html', {'show': show_data})
 
