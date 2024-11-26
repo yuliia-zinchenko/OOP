@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
+from django.utils.timezone import now
 
 class Name(models.Model):
     name = models.CharField(max_length=50)
@@ -46,5 +47,18 @@ class Quote(models.Model):
 
     def __str__(self):
         return f"{self.text} - ({self.book_title})"
+
+
+class RecentlyViewed(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content_type = models.CharField(max_length=10, choices=[('book', 'Book'), ('movie', 'Movie'), ('show', 'Show')])
+    item_id = models.CharField(max_length=20)  # ID книги/фільму/серіалу
+    title = models.CharField(max_length=255)
+    viewed_at = models.DateTimeField(default=now)
+
+    class Meta:
+        ordering = ['-viewed_at']
+        unique_together = ('user', 'content_type', 'item_id')
+
 
 

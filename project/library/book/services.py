@@ -2,7 +2,10 @@ import requests
 import os
 from dotenv import load_dotenv
 from django.db.models import Count
+from django.db.utils import IntegrityError
 from .models import UserBook
+from movie.models import Movie
+from TVshow.models import TVshow
 
 def get_top_genres(user, top_n=3):
     top_genres = UserBook.objects.filter(user=user, status='mark_as_read') \
@@ -195,15 +198,5 @@ def get_author_based_recommendations_with_api(user):
 
     return recommendations
 
-
-
-
-
-# def get_search_based_recommendations(user):
-#     recent_searches = UserSearchHistory.objects.filter(user=user).order_by('-timestamp')[:5]  
-#     recommendations = []
-#     for search in recent_searches:
-#         recommendations += UserBook.objects.filter(title__icontains=search.query)[:3] 
-#     return recommendations
 
 

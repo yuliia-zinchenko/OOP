@@ -14,6 +14,7 @@ from datetime import date
 import json
 from .models import TVshow
 from django.core.cache import cache
+from book.utils import add_to_recently_viewed
 
 
 @login_required
@@ -40,8 +41,13 @@ def TVshow_search(request):
 
 @login_required
 def show_detail(request, show_id):
+    user = request.user
     show = None  
 
+    try:
+        show = TVshow.objects.get(id=show_id, user=user)  
+    except TVshow.DoesNotExist:
+        show = None
 
     if show:
         show_data = {
@@ -52,20 +58,25 @@ def show_detail(request, show_id):
             'poster_path': show.poster_url,
         }
     else:
+
         api_data = get_tv_show_from_api(show_id)
 
         if api_data is None:
-            raise Http404("Unavaliable")
+            raise Http404("Unavailable")
 
         show_data = {
             'id': api_data.get('id', 'No ID'),
             'name': api_data.get('name', 'No name'),
             'first_air_date': api_data.get('first_air_date', 'Unknown'),
-            'overview': api_data.get('overview', 'Unavaliable'),
+            'overview': api_data.get('overview', 'Unavailable'),
             'poster_path': f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None,
         }
 
-    return render(request, 'tvshow/show_detail.html', {'show': show_data})
+
+    add_to_recently_viewed(user, 'show', show_data['id'], show_data['name'])
+
+    return render(request, 'TVshow/show_detail.html', {'show': show_data})
+
 
 
 @login_required

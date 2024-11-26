@@ -19,6 +19,7 @@ from django.utils.timezone import now
 from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info, get_author_based_recommendations_with_api
 from itertools import chain
 from TVshow.models import TVshow
+from .utils import add_to_recently_viewed
 
 
 @login_required
@@ -112,14 +113,18 @@ def book_search(request):
 
 
 
-
-@login_required
+@login_required 
 def book_detail(request, book_id):
+    user = request.user
+
     if book_id.startswith("user-"):
         try:    
             book = UserBook.objects.get(book_id=book_id) 
         except UserBook.DoesNotExist:
             raise Http404("User book not found")
+
+        add_to_recently_viewed(user, 'book', book.id, book.title)
+
         return render(request, 'book/book_detail.html', {'book': book})
 
     response = requests.get(f"https://www.googleapis.com/books/v1/volumes/{book_id}")
@@ -127,7 +132,12 @@ def book_detail(request, book_id):
         raise Http404("Book not found")
 
     book_data = response.json()
+
+    title = book_data.get('volumeInfo', {}).get('title', 'Unknown Title')
+    add_to_recently_viewed(user, 'book', book_id, title)
+
     return render(request, 'book/book_detail.html', {'book': book_data})
+
 
 
 

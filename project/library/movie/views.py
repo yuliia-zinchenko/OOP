@@ -13,6 +13,7 @@ from .services import get_movie_from_api, get_movies_by_genre
 from django.http import Http404
 from book.models import Quote
 from django.core.cache import cache
+from book.utils import add_to_recently_viewed
 
 
 
@@ -43,6 +44,7 @@ def movie_search(request):
 
 @login_required
 def movie_detail(request, movie_id):
+    user = request.user
     movie = Movie.objects.filter(user=request.user, movie_id=movie_id).first()
 
     if movie:
@@ -53,22 +55,27 @@ def movie_detail(request, movie_id):
             'overview': movie.description,
             'poster_path': movie.poster_url,
         }
+        # Викликаємо add_to_recently_viewed з даними з бази
+        add_to_recently_viewed(user, 'movie', movie.movie_id, movie.title)
     else:
-
+        # Якщо фільм не знайдений у базі, беремо дані з API
         api_data = get_movie_from_api(movie_id)
 
         if api_data is None:
             raise Http404("Фільм не знайдено або недоступний")
 
         movie_data = {
-            'id': api_data.get('id', 'Немає назви'),
+            'id': api_data.get('id', 'Немає ID'),
             'title': api_data.get('title', 'Немає назви'),
             'release_date': api_data.get('release_date', 'Невідомо'),
             'overview': api_data.get('overview', 'Опис недоступний'),
             'poster_path': f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None,
         }
+        # Викликаємо add_to_recently_viewed з даними з API
+        add_to_recently_viewed(user, 'movie', movie_data['id'], movie_data['title'])
 
     return render(request, 'movie/movie_detail.html', {'movie': movie_data})
+
 
 @login_required
 @csrf_exempt
