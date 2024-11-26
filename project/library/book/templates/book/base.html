@@ -56,6 +56,7 @@
                                 <a href="{% url 'movie_main' %}">All Movies</a>
                                 <a href="{% url 'movie_main' %}?status=mark_as_watched" {% if status == 'mark_aswatched' %}class="active"{% endif %}>Whatch History</a>
                                 <a href="{% url 'movie_main' %}?status=watch_later" {% if status == 'watch_later' %}class="active"{% endif %}>Watch later</a>
+                                <a href="{% url 'movie_recommendations' %}">Recommended</a>
                             </div>
                         </div>
                     </li>
@@ -65,9 +66,9 @@
                             <div class="dropdown-content">
                                 <a href="{% url 'show_main' %}" {% if not status %}class="active"{% endif %}>All Shows</a>
                                 <a href="{% url 'show_main' %}?status=currently_watching" {% if status == 'currently_watching' %}class="active"{% endif %}>Currently Watching</a>
-                                <a href="{% url 'movie_main' %}?status=mark_as_watched" {% if status == 'mark_as_watched' %}class="active"{% endif %}>Wathed</a>
+                                <a href="{% url 'movie_main' %}?status=mark_as_watched" {% if status == 'mark_as_watched' %}class="active"{% endif %}>Сompleted</a>
                                 <a href="{% url 'movie_main' %}?status=watch_laterr" {% if status == 'watch_later' %}class="active"{% endif %}>Watch Later</a>
-                                <!-- <a href="{% url 'book_recommendations' %}">Recommended</a> -->
+                                <a href="{% url 'show_recommendations' %}">Recommended</a>
                             </div>
                         </div>
                     </li>
@@ -84,7 +85,7 @@
         {% block book_main %}{% endblock %}
         <div class="content-grid">
             {% if results %}
-        {% for item in results %}
+            {% for item in results %}
             {% if item.description %}
             <div class="book-card">
                 <a href="{% url 'movie_detail' item.movie_id %}">
@@ -128,9 +129,14 @@
                     <button onclick="closeDeleteDialog()">Cancel</button>
                 </div>
             </dialog>
+            {% endif %}  
+
+            {% endfor %}
+            {% endif %}
         </div>
  
-    </div>
+
+
     
     
     <script>
@@ -193,11 +199,8 @@
         </div>
     </dialog>
 
-            {% endif %}  
 
-        {% endfor %}
-        {% endif %}
-    </div>
+
     </main>
     <script>
 window.addEventListener('pageshow', function(event) {

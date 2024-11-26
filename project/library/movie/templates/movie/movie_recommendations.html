@@ -1,0 +1,56 @@
+{% extends 'book/base.html' %}
+{% load static %}
+
+{% block book_main %}
+<div class="genre-form">
+<form method="GET">
+    <label for="genre">Choose a genre:</label>
+    <select id="genre" name="genre">
+        {% for genre in genre_choices %}
+            <option value="{{ genre.id }}" {% if genre.id == current_genre %}selected{% endif %}>
+                {{ genre.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label for="sort_by">Sort by:</label>
+    <select id="sort_by" name="sort_by">
+        {% for sort in sort_choices %}
+            <option value="{{ sort.id }}" {% if sort.id == current_sort %}selected{% endif %}>
+                {{ sort.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Apply</button>
+</form>
+</div>
+
+
+<h1>Movies in {{ selected_genre }}</h1>
+<div class="content-grid">
+  {% for movie in movies %}
+  <div class="book-card">
+    <a href="{% url 'movie_detail' movie.id %}">
+    <img class="default_movie" src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}">
+    <h3 class="book-title">{{ movie.title }}</h3>
+    <p class="book-release">{{ movie.release_date|slice:":4" }}</p>
+</a >
+</div>
+  {% endfor %}
+</div>
+<div class="pagination">
+    <!-- Попередня сторінка -->
+    <a href="?genre={{ current_genre }}&sort_by={{ current_sort }}&page={{ page|add:"-1" }}" 
+       class="pagination-link {% if page <= 1 %}disabled{% endif %}">
+       < Previous
+    </a>
+
+    <!-- Наступна сторінка -->
+    <a href="?genre={{ current_genre }}&sort_by={{ current_sort }}&page={{ page|add:"1" }}" 
+       class="pagination-link">
+        Next >
+    </a>
+</div>
+
+{% endblock %}

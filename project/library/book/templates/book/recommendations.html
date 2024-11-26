@@ -9,7 +9,7 @@
         {% for book in recommended_books %}
             <div class="book-card">
                 <a href="{% url 'book_detail' book.id%}">
-                <img src="{{ book.cover_image_url }}" сlass="image_default"  >
+                <img src="{{ book.cover_image_url }}"   сlass="image_default"  >
                 <h3 class="book-title">{{ book.title }}</h3>
                 <p class="book-author">{{ book.author|slice:":100"  }}</p>
                 </a>

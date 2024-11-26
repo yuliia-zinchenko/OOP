@@ -41,7 +41,7 @@ header {
 
 .logo {
     text-decoration: none;
-
+    font-weight: 600;
     color: var(--light-bg);
     font-family: 'Libre Baskerville', serif;
     font-size: 1.8rem;
@@ -467,6 +467,15 @@ img {
     margin-bottom: 1rem;
 }
 
+.default_movie{
+    width: 90%;
+    height: 300px;
+    background-color: var(--secondary-color);
+    margin-left: 5%;
+    border-radius: 5px;
+    border-color: transparent;
+    margin-bottom: 1rem;
+}
 
 .image_default{
     width: 90%;
@@ -598,4 +607,121 @@ a {
     font-family: 'Libre Baskerville', serif;
     margin-top: 2%;
     margin-bottom: 2%;
+}
+
+
+
+
+/* Стиль для форми
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+} */
+.genre-form{
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+/* Стиль для міток */
+form label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    margin-left: 2%;
+}
+
+/* Стиль для випадаючих списків */
+form select {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+/* Стиль для вибраного елементу списку */
+form select:focus {
+    border-color: var(--secondary-color);
+    background-color: #f1f9ff;
+    outline: none;
+}
+
+
+form button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: white;
+    margin-left: 2%;
+    background-color: var(--secondary-color);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+form button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+
+form button:active {
+    background-color: var(--light-bg);
+    transform: translateY(0);
+}
+
+
+@media (max-width: 768px) {
+    form {
+        width: 90%;
+        padding: 15px;
+    }
+
+    form select,
+    form button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+.pagination {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;
+    padding: 10px;
+}
+
+.pagination-link {
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+    margin: 5px;
+    text-decoration: none;
+    background-color: transparent;
+    color: var(--text-color);
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.pagination-link:hover {
+    color: var(--accent-color);
+}
+
+.pagination-link.disabled {
+    background-color: transparent;
+    pointer-events: none;
+    cursor: not-allowed;
+    font-family: 'Montserrat', sans-serif;
+    color: #666;
 }

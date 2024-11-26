@@ -10,6 +10,6 @@ urlpatterns = [
     path('add_or_update_tvshow/', views.add_or_update_show, name='add_or_update_show'),
     path('show/', views.show_main, name='show_main'),
     path('delete_show/<int:show_id>/', views.delete_show, name='delete_show'),
-
+    path('show_recommendations/', views.show_recommendations, name='show_recommendations'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
