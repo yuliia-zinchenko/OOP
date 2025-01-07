@@ -47,7 +47,7 @@
         </span>
         <p class="book-updated">{{ movie.last_updated|date:"d M Y" }}</p>
         <div id="movie-{{ movie.movie_id }}" class="delete">
-            <button class="delete-button" onclick="openDeleteDialog('{{ movie.movie_id }}')">
+            <button class="delete-button" onclick="openDeleteDialog('{{ movie.movie_id }}', 'Movie')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="gray" class="bi bi-trash3" viewBox="0 0 16 16">
                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                 </svg>
@@ -69,12 +69,13 @@
 
 
 <script>
-    function openDeleteDialog(movieId) {
-        console.log("Movie ID:", movieId); 
+    function openDeleteDialog(movieId, contentType) {
+        console.log(`${contentType === 'TVshow' ? 'Show' : 'Movie'} ID:`, movieId);
         const dialog = document.getElementById("deleteDialog");
-        dialog.showModal(); 
-        dialog.setAttribute("data-movie-id", movieId);
-    }
+        dialog.showModal();
+        dialog.setAttribute("data-id", showId);
+        dialog.setAttribute("data-type", contentType);
+        }
     
     function closeDeleteDialog() {
         const dialog = document.getElementById("deleteDialog");
@@ -82,34 +83,44 @@
     }
     
     function confirmDelete() {
-        const dialog = document.getElementById("deleteDialog");
-        const movieId = dialog.getAttribute("data-movie-id");
+    const dialog = document.getElementById("deleteDialog");
+    const showId = dialog.getAttribute("data-id");
+    const type = dialog.getAttribute("data-type");
+    const url = type === 'TVshow' ? `/delete_show/${showId}/` : `/delete_movie/${movieId}/`;
+
+    console.log(`Deleting ${type}: ${url}`);
     
-        console.log(`/delete_movie/${movieId}/`);
-        fetch(`/delete_movie/${movieId}/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken() 
-            }
-        }).then(response => {
-            if (response.ok) {
-                alert('Movie deleted successfully!');
-                location.reload(); 
-            } else {
-                alert('Failed to delete movie!');
-                return response.json().then(data => console.error('Error details:', data));
-            }
-        }).catch(error => {
-            console.error('Error:', error);
-            alert('Something went wrong.');
-        });
-        closeDeleteDialog();
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        }
+    }).then(response => {
+        if (response.ok) {
+            alert(`${type} deleted successfully!`);
+            location.reload();
+        } else {
+            response.json().then(data => console.error('Error details:', data));
+            alert(`Failed to delete ${type}.`);
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong.');
+    });
+
+    closeDeleteDialog();
+}
+
+function getCSRFToken() {
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found.');
+        return '';
     }
-    function getCSRFToken() {
-        let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        return csrfToken;
-    }
+    return token;
+}
+
     </script>
 
 <div class="add">

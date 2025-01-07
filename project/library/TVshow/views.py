@@ -143,8 +143,8 @@ def show_main(request):
 
     if sort_by == 'title':
         tvshows = tvshows.order_by('title') 
-    elif sort_by == 'added_at':
-        tvshows = tvshows.order_by('-added_at')  
+    elif sort_by == 'DATE':
+        tvshows = tvshows.order_by('-last-updated')  
 
     context = {
         'tvshows': tvshows,
@@ -154,19 +154,18 @@ def show_main(request):
     }
     return render(request, 'tvshow/show_main.html', context)
 
-
+@csrf_exempt
 def delete_show(request, show_id):
     if request.method == 'DELETE':
-        show = get_object_or_404(TVshow, user=request.user, show_id=show_id)
-
-        show.delete()
-
-        return JsonResponse({'message': 'Show deleted successfully'}, status=200)
+        try:
+            show = get_object_or_404(TVshow, user=request.user, show_id=show_id)
+            show.delete()
+            return JsonResponse({'message': 'Show deleted successfully'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': f'Failed to delete show: {str(e)}'}, status=500)
     else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def show_recommendations(request):

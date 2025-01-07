@@ -142,8 +142,8 @@ def movie_main(request):
 
     if sort_by == 'title':
         movies = movies.order_by('title') 
-    elif sort_by == 'added_at':
-        movies = movies.order_by('-added_at') 
+    elif sort_by == 'date':
+        movies = movies.order_by('-last_updated') 
 
     context = {
         'movies': movies,

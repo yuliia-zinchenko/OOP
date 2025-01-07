@@ -2,10 +2,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from django.db.models import Count
-from django.db.utils import IntegrityError
 from .models import UserBook
-from movie.models import Movie
-from TVshow.models import TVshow
+
 
 def get_top_genres(user, top_n=3):
     top_genres = UserBook.objects.filter(user=user, status='mark_as_read') \

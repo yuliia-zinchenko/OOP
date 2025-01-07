@@ -3,11 +3,10 @@ from django.db import transaction
 
 @transaction.atomic
 def add_to_recently_viewed(user, content_type, item_id, title, cover_image_url=None):
-    # Перевіряємо, чи вже існує запис з цим елементом для цього користувача
     if RecentlyViewed.objects.filter(user=user, content_type=content_type, item_id=item_id).exists():
-        return  # Якщо існує, не додаємо повторно
+        return  
 
-    # Додаємо новий запис
+   
     RecentlyViewed.objects.create(
         user=user,
         content_type=content_type,
@@ -16,10 +15,10 @@ def add_to_recently_viewed(user, content_type, item_id, title, cover_image_url=N
         cover_image_url=cover_image_url,
     )
 
-    # Перевіряємо кількість записів з цим типом контенту для користувача
+
     records = RecentlyViewed.objects.filter(user=user, content_type=content_type).order_by('-viewed_at')
     if records.count() > 6:
-        # Отримуємо зайві записи (найстаріші)
+
         excess_records = records[6:]
         for record in excess_records:
             record.delete()
