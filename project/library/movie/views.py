@@ -11,9 +11,9 @@ from .models import Movie
 from django.views.decorators.csrf import csrf_exempt
 from .services import get_movie_from_api, get_movies_by_genre
 from django.http import Http404
-from book.models import Quote, RecentlyViewed
+from general.models import Quote, RecentlyViewed
 from django.core.cache import cache
-from book.utils import add_to_recently_viewed
+from general.utils import add_to_recently_viewed
 
 
 

@@ -84,7 +84,7 @@
                 const tvshowData = {
                     show_id: parseInt(showId),
                     title: "{{ show.name|escapejs }}",
-                    release_year: "{{ show.first_air_date|escapejs }}",
+                    first_air_date: "{{ show.first_air_date|escapejs }}",
                     description: "{{ show.overview|escapejs }}",
                     poster_url: "https://image.tmdb.org/t/p/w500{{ show.poster_path }}",
                     status: status,

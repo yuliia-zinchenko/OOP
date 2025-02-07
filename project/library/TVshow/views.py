@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import os
 import requests
-from book.models import Quote, RecentlyViewed
+from general.models import Quote, RecentlyViewed
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from dotenv import load_dotenv
@@ -14,7 +14,7 @@ from datetime import date
 import json
 from .models import TVshow
 from django.core.cache import cache
-from book.utils import add_to_recently_viewed
+from general.utils import add_to_recently_viewed
 
 
 @login_required
@@ -90,7 +90,7 @@ def add_or_update_show(request):
 
             show_id = data.get('show_id')
             title = data.get('title')
-            release_year = data.get('release_year')
+            first_air_date = data.get('first_air_date')
             description = data.get('description', '')
             poster_url = data.get('poster_url', '')
             status = data.get('status')
@@ -104,7 +104,7 @@ def add_or_update_show(request):
                 show_id=show_id,
                 defaults={
                     'title': title,
-                    'release_year': release_year,
+                    'first_air_date': first_air_date,
                     'description': description,
                     'poster_url': poster_url,
                     'status': status,
@@ -143,8 +143,8 @@ def show_main(request):
 
     if sort_by == 'title':
         tvshows = tvshows.order_by('title') 
-    elif sort_by == 'DATE':
-        tvshows = tvshows.order_by('-last-updated')  
+    elif sort_by == 'date':
+        tvshows = tvshows.order_by('-last_updated')  
 
     context = {
         'tvshows': tvshows,

@@ -2,11 +2,10 @@
 import os
 import django
 
-# Налаштовуємо Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "library.settings")
 django.setup()
 
-from book.models import Quote
+from general.models import Quote
 
 quotes = [
     {"text": "Not all those who wander are lost.", "book_title": "The Lord of the Rings"},

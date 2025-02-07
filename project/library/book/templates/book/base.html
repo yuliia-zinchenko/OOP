@@ -86,7 +86,7 @@
         <div class="content-grid">
             {% if results %}
             {% for item in results %}
-            {% if item.description %}
+            {% if item.release_year %}
             <div class="book-card">
                 <a href="{% url 'movie_detail' item.movie_id %}">
                 <img src="{{ item.poster_url }}" alt="{{ item.title }}">
@@ -108,7 +108,50 @@
                 </span>
                 <p class="book-updated">{{ item.last_updated|date:"d M Y" }}</p>
                 <div id="item-{{ item.movie_id }}" class="delete">
-                    <button class="delete-button" onclick="openDeleteDialog('{{ item.movie_id }}')">
+                    <button class="delete-button" onclick="openDeleteDialog('{{ item.movie_id }}', 'movie')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="gray" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                        </svg>
+                    </button>
+                </div>
+                <dialog id="deleteDialog">
+                    <p>Are you sure you want to delete this item?</p>
+                    <div class="dialog-buttons">
+                        <button onclick="confirmDelete()">Delete</button>
+                        <button onclick="closeDeleteDialog()">Cancel</button>
+                    </div>
+                </dialog>
+            </div>
+            <dialog id="deleteDialog">
+                <p>Are you sure you want to delete this item?</p>
+                <div class="dialog-buttons">
+                    <button onclick="confirmDelete()">Delete</button>
+                    <button onclick="closeDeleteDialog()">Cancel</button>
+                </div>
+            </dialog>
+            {% elif item.first_air_date %}
+            <div class="book-card">
+                <a href="{% url 'show_detail' item.show_id %}">
+                <img src="{{ item.poster_url }}" alt="{{ item.title }}">
+                <h3 class="book-title">{{ item.title }}</h3>
+                <p class="book-release">{{ item.release_date|slice:":4" }}</p>
+            </a >
+                <span class="status-badge {% if item.status == 'mark_as_watched' %}completed{% else %}wishlist{% endif %}">
+                    {% if item.status == 'mark_as_watched' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                    </svg>
+                    
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                        <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"/>
+                    </svg>
+                    {% endif %}
+                    {{ item.get_status_display }}
+                </span>
+                <p class="book-updated">{{ item.last_updated|date:"d M Y" }}</p>
+                <div id="item-{{ item.show_id }}" class="delete">
+                    <button class="delete-button" onclick="openDeleteDialog('{{ item.show_id }}', 'show')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="gray" class="bi bi-trash3" viewBox="0 0 16 16">
                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                         </svg>
@@ -134,54 +177,6 @@
             {% endfor %}
             {% endif %}
         </div>
- 
-
-
-    
-    
-    <script>
-        function openDeleteDialog(movieId) {
-            console.log("Movie ID:", movieId); 
-            const dialog = document.getElementById("deleteDialog");
-            dialog.showModal(); 
-            dialog.setAttribute("data-movie-id", movieId);
-        }
-        
-        function closeDeleteDialog() {
-            const dialog = document.getElementById("deleteDialog");
-            dialog.close();
-        }
-        
-        function confirmDelete() {
-            const dialog = document.getElementById("deleteDialog");
-            const movieId = dialog.getAttribute("data-movie-id");
-        
-            console.log(`/delete_movie/${movieId}/`);
-            fetch(`/delete_movie/${movieId}/`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCSRFToken() 
-                }
-            }).then(response => {
-                if (response.ok) {
-                    alert('Movie deleted successfully!');
-                    location.reload(); 
-                } else {
-                    alert('Failed to delete movie!');
-                    return response.json().then(data => console.error('Error details:', data));
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Something went wrong.');
-            });
-            closeDeleteDialog();
-        }
-        function getCSRFToken() {
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            return csrfToken;
-        }
-        </script>
     
     <div class="add">
         <a href="#" class="add-button" onclick="openDialog()">+</a>
@@ -203,11 +198,111 @@
 
     </main>
     <script>
-window.addEventListener('pageshow', function(event) {
+// Відкрити діалогове вікно для видалення
+function openDeleteDialog(itemId, type) {
+    const dialog = document.getElementById('deleteDialog');
+    dialog.setAttribute('data-item-id', itemId);
+    dialog.setAttribute('data-item-type', type);
+    dialog.showModal();
+}
+
+// Закрити діалогове вікно
+function closeDeleteDialog() {
+    const dialog = document.getElementById('deleteDialog');
+    dialog.removeAttribute('data-item-id');
+    dialog.removeAttribute('data-item-type');
+    dialog.close();
+}
+
+// Підтвердити видалення
+function confirmDelete() {
+    const dialog = document.getElementById('deleteDialog');
+    const itemId = dialog.getAttribute('data-item-id');
+    const itemType = dialog.getAttribute('data-item-type');
+
+    if (itemType === 'movie') {
+        deleteMovie(itemId);
+    } else if (itemType === 'show') {
+        deleteShow(itemId);
+    } else if (itemType === 'book') {
+        deleteBook(itemId);
+    }
+
+    closeDeleteDialog();
+}
+
+// Функція для видалення фільму
+function deleteMovie(movieId) {
+    fetch(`/delete_movie/${movieId}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Movie deleted successfully!');
+            location.reload();
+        } else {
+            console.error('Failed to delete movie.');
+        }
+    });
+}
+
+
+function deleteBook(bookId) {
+    fetch(`/delete_book/${bookId}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Book deleted successfully!');
+            location.reload();
+        } else {
+            console.error('Failed to delete book.');
+        }
+    });
+}
+
+
+// Функція для видалення серіалу
+function deleteShow(showId) {
+    fetch(`/delete_show/${showId}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Show deleted successfully!');
+            location.reload();
+        } else {
+            console.error('Failed to delete show.');
+        }
+    });
+}
+
+// Отримання CSRF токена
+function getCSRFToken() {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+    return cookieValue || '';
+}
+
+
+
+        window.addEventListener('pageshow', function(event) {
         if (event.persisted) {
             document.getElementById('searchInput').value = '';
         }
     });
  </script>
+
  </body>
 </html>

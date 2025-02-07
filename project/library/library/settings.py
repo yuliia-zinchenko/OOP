@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'movie',
     'TVshow',
+    'general',
 ]
 
 MIDDLEWARE = [
@@ -176,7 +177,6 @@ SECRET_KEY = 'slksd332jktrngb@_)#)@_dko)#Ifrjfi3495(#mk)'
 
 
 PASSWORD_RESET_TIMEOUT = 14400
-
 
 
 

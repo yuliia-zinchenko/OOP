@@ -9,8 +9,10 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserBook, Quote, RecentlyViewed
+from .models import UserBook
+from general.models import Quote, RecentlyViewed
 from movie.models import Movie
+from TVshow.models import TVshow
 from datetime import date
 from django.db.models import Q
 import json
@@ -18,7 +20,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
 from .services import get_top_genres, get_recommendations_from_google_books, get_bestsellers_with_google_info, get_author_based_recommendations_with_api
 from itertools import chain
-from .utils import add_to_recently_viewed
+from general.utils import add_to_recently_viewed
 
 
 @login_required
@@ -33,26 +35,28 @@ def index(request):
     else:
         quote = None
 
-    # Фільтрація книг та фільмів
     books = UserBook.objects.filter(user=user).exclude(title__isnull=True).exclude(title__exact='')
     movies = Movie.objects.filter(user=user)
+    tvshows = TVshow.objects.filter(user=user)
 
-    # Якщо вказано пошуковий запит
     if query:
         books = books.filter(
             Q(title__icontains=query) | Q(author__icontains=query)
         )
         movies = movies.filter(
-            Q(title__icontains=query) | Q(description__icontains=query)
+            Q(title__icontains=query) | Q(release_year__icontains=query)
+        )
+        tvshows = tvshows.filter(
+            Q(title__icontains=query) | Q(first_air_date__icontains=query)
         )
         
-        # Об'єднати результати тільки для пошуку
+
         results = sorted(
-            list(chain(books, movies)),
+            list(chain(books, movies, tvshows)),
             key=lambda x: x.title if hasattr(x, 'title') else '',
         )
     else:
-        # Якщо пошуку немає, просто відображати окремо
+
         results = []
 
     # Сортування книг
@@ -76,9 +80,6 @@ def index(request):
         'query': query,
         'quote': quote,
     })
-
-
-
 
 
 @login_required
