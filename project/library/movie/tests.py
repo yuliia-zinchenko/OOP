@@ -1,8 +1,13 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from .models import Movie
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
+from unittest.mock import patch
+from general.models import RecentlyViewed
+from django.urls import reverse
+import os
+from dotenv import load_dotenv
 
 class MovieModelTest(TestCase):
     def setUp(self):
@@ -86,6 +91,67 @@ class MovieModelTest(TestCase):
         )
         self.user.delete()
         self.assertEqual(Movie.objects.count(), 0)
+
+class MovieSearchTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client = Client()
+        self.client.login(username='testuser', password='testpassword')
+        self.url = reverse('movie_search') 
+
+    @patch('movie.views.requests.get')  
+    def test_movie_search_successful(self, mock_get):
+
+        mock_response = {
+            'results': [
+                {'id': 1, 'title': 'Test Movie 1', 'release_date': '2023-01-01'},
+                {'id': 2, 'title': 'Test Movie 2', 'release_date': '2022-01-01'},
+            ]
+        }
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = mock_response
+
+        response = self.client.get(self.url, {'query': 'Test Movie'})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'movie/movie_search.html')
+
+        self.assertIn('results', response.context)
+        self.assertEqual(len(response.context['results']), 2)
+        self.assertEqual(response.context['results'][0]['title'], 'Test Movie 1')
+
+    def test_recently_viewed_movies_display(self):
+        RecentlyViewed.objects.create(user=self.user, content_type='movie', item_id=1)
+        RecentlyViewed.objects.create(user=self.user, content_type='movie', item_id=2)
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertIn('recently_viewed_movies', response.context)
+        self.assertEqual(response.context['recently_viewed_movies'].count(), 2)
+
+    @patch('movie.views.requests.get')
+    def test_api_error_handling(self, mock_get):
+        mock_get.return_value.status_code = 500
+
+        response = self.client.get(self.url, {'query': 'Test Movie'})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'movie/movie_search.html')
+
+        self.assertIn('results', response.context)
+        self.assertEqual(len(response.context['results']), 0)
+
+    def test_empty_query(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'movie/movie_search.html')
+
+        self.assertIn('results', response.context)
+        self.assertEqual(len(response.context['results']), 0)
+
+    def test_unauthenticated_user_redirect(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302) 
 
 
 

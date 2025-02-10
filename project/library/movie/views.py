@@ -41,8 +41,6 @@ def movie_search(request):
     return render(request, 'movie/movie_search.html', {'results': results, 'query': form_data, 'recently_viewed_movies': recently_viewed_movies})
 
 
-
-
 @login_required
 def movie_detail(request, movie_id):
     user = request.user
@@ -56,8 +54,6 @@ def movie_detail(request, movie_id):
             'overview': movie.description,
             'poster_path': movie.poster_url,
         }
-        # cover_image_url = movie.poster_url
-        # add_to_recently_viewed(user, 'movie', movie.movie_id, movie.title, cover_image_url)
     else:
 
         api_data = get_movie_from_api(movie_id)
