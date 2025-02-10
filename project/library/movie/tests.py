@@ -153,5 +153,74 @@ class MovieSearchTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302) 
 
+class MovieDetailTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client = Client()
+        self.client.login(username='testuser', password='testpassword')
 
+        self.movie_detail_url = lambda movie_id: reverse('movie_detail', kwargs={'movie_id': movie_id})
+
+        self.movie = Movie.objects.create(
+            user=self.user,
+            movie_id=123,
+            title="Test Movie",
+            release_year="2021",
+            description="Test description",
+            poster_url="https://example.com/poster.jpg"
+        )
+
+    @patch('movie.views.get_movie_from_api')
+    @patch('movie.views.add_to_recently_viewed')
+    def test_movie_in_database(self, mock_add_to_recently_viewed, mock_get_movie_from_api):
+        response = self.client.get(self.movie_detail_url(123))
+
+        self.assertEqual(response.status_code, 200)
+
+        mock_get_movie_from_api.assert_not_called()
+        self.assertContains(response, "Test Movie")
+        self.assertContains(response, "Test description")
+
+    @patch('movie.views.get_movie_from_api')
+    @patch('movie.views.add_to_recently_viewed')
+    def test_movie_not_in_database_but_in_api(self, mock_add_to_recently_viewed, mock_get_movie_from_api):
+        mock_get_movie_from_api.return_value = {
+            'id': 456,
+            'title': 'API Movie',
+            'release_date': '2023-01-01',
+            'overview': 'API description',
+            'poster_path': '/api_poster.jpg',
+        }
+
+        response = self.client.get(self.movie_detail_url(456))
+
+        self.assertEqual(response.status_code, 200)
+
+        mock_get_movie_from_api.assert_called_once_with(456)
+
+        mock_add_to_recently_viewed.assert_called_once_with(
+            self.user,
+            'movie',
+            456,
+            'API Movie',
+            'https://image.tmdb.org/t/p/w500/api_poster.jpg'
+        )
+
+        self.assertContains(response, "API Movie")
+        self.assertContains(response, "API description")
+
+    @patch('movie.views.get_movie_from_api')
+    def test_movie_not_found_in_api(self, mock_get_movie_from_api):
+        mock_get_movie_from_api.return_value = None
+
+        response = self.client.get(self.movie_detail_url(789))
+
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_login_required(self):
+        self.client.logout()
+        response = self.client.get(self.movie_detail_url(123))
+        self.assertEqual(response.status_code, 302)  
+        self.assertIn('', response.url)
 
