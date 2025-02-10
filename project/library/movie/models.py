@@ -23,7 +23,6 @@ class Movie(models.Model):
         unique_together = ('user', 'movie_id') 
 
     def clean(self):
-        """Валідація поля status перед збереженням."""
         valid_statuses = dict(self.STATUS_CHOICES).keys()
         if self.status not in valid_statuses:
             raise ValidationError({'status': 'Invalid status choice.'})

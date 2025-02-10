@@ -6,8 +6,8 @@ from django.core.exceptions import ValidationError
 from unittest.mock import patch
 from general.models import RecentlyViewed
 from django.urls import reverse
-import os
-from dotenv import load_dotenv
+from movie.models import Movie
+import json
 
 class MovieModelTest(TestCase):
     def setUp(self):
@@ -221,6 +221,106 @@ class MovieDetailTest(TestCase):
     def test_login_required(self):
         self.client.logout()
         response = self.client.get(self.movie_detail_url(123))
+        self.assertEqual(response.status_code, 302)  
+        self.assertIn('', response.url)
+
+class AddOrUpdateMovieTest(TestCase):
+    def setUp(self):
+
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client = Client()
+        self.client.login(username='testuser', password='testpassword')
+
+        self.url = reverse('add_or_update_movie')
+
+    def test_add_new_movie(self):
+
+        data = {
+            'movie_id': 123,
+            'title': 'New Movie',
+            'release_year': '2023',
+            'description': 'This is a new movie',
+            'poster_url': 'https://example.com/poster.jpg',
+            'status': 'mark_as_watched',
+        }
+        response = self.client.post(self.url, data=json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+
+        movie = Movie.objects.get(movie_id=123, user=self.user)
+        self.assertEqual(movie.title, 'New Movie')
+        self.assertEqual(movie.status, 'mark_as_watched')
+
+        response_data = response.json()
+        self.assertEqual(response_data['message'], 'Movie added or updated successfully')
+        self.assertEqual(response_data['status'], 'mark_as_watched')
+
+    def test_update_existing_movie_status(self):
+
+        movie = Movie.objects.create(
+            user=self.user,
+            movie_id=123,
+            title='Existing Movie',
+            release_year='2022',
+            description='Old description',
+            poster_url='https://example.com/poster.jpg',
+            status='watch_later',
+        )
+
+        data = {
+            'movie_id': 123,
+            'title': 'Existing Movie',
+            'release_year': '2022',
+            'description': 'Old description',
+            'poster_url': 'https://example.com/poster.jpg',
+            'status': 'mark_as_watched',
+        }
+        response = self.client.post(self.url, data=json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+
+        movie.refresh_from_db()
+        self.assertEqual(movie.status, 'mark_as_watched')
+
+    def test_invalid_json_data(self):
+
+        response = self.client.post(self.url, data="invalid json", content_type='application/json')
+
+
+        self.assertEqual(response.status_code, 400)
+
+        response_data = response.json()
+        self.assertEqual(response_data['error'], 'Invalid JSON data')
+
+    def test_missing_movie_id(self):
+
+        data = {
+            'title': 'New Movie',
+            'release_year': '2023',
+            'description': 'This is a new movie',
+            'poster_url': 'https://example.com/poster.jpg',
+            'status': 'watched',
+        }
+        response = self.client.post(self.url, data=json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+
+        response_data = response.json()
+        self.assertEqual(response_data['error'], 'Valid movie ID is required')
+
+    def test_login_required(self):
+
+        self.client.logout()
+        data = {
+            'movie_id': 123,
+            'title': 'New Movie',
+            'release_year': '2023',
+            'description': 'This is a new movie',
+            'poster_url': 'https://example.com/poster.jpg',
+            'status': 'watched',
+        }
+        response = self.client.post(self.url, data=json.dumps(data), content_type='application/json')
+
         self.assertEqual(response.status_code, 302)  
         self.assertIn('', response.url)
 
