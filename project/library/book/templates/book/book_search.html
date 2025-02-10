@@ -110,7 +110,12 @@ function closeDialog() {
                 {% if results %}
                     {% for item in results %}
                         <div class="book-card">
+                            {% if item.id %}
                             <a href="{% url 'book_detail' item.id %}">
+                        {% else %}
+                            <span>No details available</span>
+                        {% endif %}
+                        
                             {% if item.volumeInfo.imageLinks %}
                                 <div class="book-cover1" style="background-image: url('{{ item.volumeInfo.imageLinks.thumbnail }}');"></div>
                             {% else %}
