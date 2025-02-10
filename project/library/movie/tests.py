@@ -4,10 +4,12 @@ from .models import Movie
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 from unittest.mock import patch
-from general.models import RecentlyViewed
+from general.models import RecentlyViewed, Quote
 from django.urls import reverse
 from movie.models import Movie
 import json
+from datetime import date
+
 
 class MovieModelTest(TestCase):
     def setUp(self):
@@ -324,3 +326,89 @@ class AddOrUpdateMovieTest(TestCase):
         self.assertEqual(response.status_code, 302)  
         self.assertIn('', response.url)
 
+class MovieMainTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client = Client()
+        self.client.login(username='testuser', password='testpassword')
+        self.url = reverse('movie_main') 
+
+        self.movie1 = Movie.objects.create(user=self.user, movie_id=1, title="Movie A", status="mark_as_watched", last_updated=date(2025, 2, 10))
+        self.movie2 = Movie.objects.create(user=self.user, movie_id=2, title="Movie B", status="watch_later",  last_updated=date(2025, 2, 5))
+        self.movie3 = Movie.objects.create(user=self.user, movie_id=3, title="Movie C", status="mark_as_watched",  last_updated=date(2025, 2, 8))
+
+        Quote.objects.create(text="Test quote", book_title="Book")
+
+    def test_movie_main_with_status_filter(self):
+        response = self.client.get(self.url, {'status': 'mark_as_watched'})
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.context['movies']), 2)
+        self.assertTrue(all(movie.status == 'mark_as_watched' for movie in response.context['movies']))
+
+    def test_movie_main_with_sort_by_title(self):
+
+        response = self.client.get(self.url, {'sort_by': 'title'})
+
+        self.assertEqual(response.status_code, 200)
+
+        movie_titles = [movie.title for movie in response.context['movies']]
+        self.assertEqual(movie_titles, ['Movie A', 'Movie B', 'Movie C'])
+
+    def test_movie_main_with_sort_by_date(self):
+
+        response = self.client.get(self.url, {'sort_by': 'date'})
+        self.assertEqual(response.status_code, 200)
+        movies = response.context['movies']
+
+        sorted_movies = sorted(movies, key=lambda movie: movie.last_updated, reverse=True)
+        self.assertEqual(list(movies), sorted_movies)
+
+    def test_movie_main_with_quote(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.context['quote'])
+        self.assertEqual(response.context['quote'].text, "Test quote")
+
+    def test_movie_main_without_quote(self):
+        Quote.objects.all().delete()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.context['quote'])
+
+class DeleteMovieTest(TestCase):
+    def setUp(self):
+
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client = Client()
+        self.client.login(username='testuser', password='testpassword')
+
+        self.movie = Movie.objects.create(user=self.user, movie_id=123, title="Movie A", status="mark_as_watched", last_updated=date(2025, 2, 10))
+
+    def test_delete_movie(self):
+
+        self.assertEqual(Movie.objects.count(), 1)
+
+        response = self.client.delete(reverse('delete_movie', kwargs={'movie_id': self.movie.movie_id}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['message'], 'Movie deleted successfully')
+
+        self.assertEqual(Movie.objects.count(), 0)
+
+    def test_delete_movie_invalid_method(self):
+
+        response = self.client.post(reverse('delete_movie', kwargs={'movie_id': self.movie.movie_id}))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['error'], 'Invalid request')
+
+    def test_delete_movie_not_found(self):
+
+        response = self.client.delete(reverse('delete_movie', kwargs={'movie_id': 99999}))
+
+        self.assertEqual(response.status_code, 404)
