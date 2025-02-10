@@ -167,8 +167,8 @@ def delete_movie(request, movie_id):
 
 @login_required
 def movie_recommendations(request):
-    genre_id = request.GET.get('genre', '28')  # За замовчуванням: Action
-    sort_by = request.GET.get('sort_by', 'vote_average.desc')  # За замовчуванням: рейтинг
+    genre_id = request.GET.get('genre', '28')  
+    sort_by = request.GET.get('sort_by', 'vote_average.desc') 
     page = int(request.GET.get('page', 1))  
 
     if page < 1: 
