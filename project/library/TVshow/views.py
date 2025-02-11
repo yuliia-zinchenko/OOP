@@ -17,6 +17,7 @@ from django.core.cache import cache
 from general.utils import add_to_recently_viewed
 
 
+
 @login_required
 def TVshow_search(request):
     results = []
@@ -35,7 +36,9 @@ def TVshow_search(request):
             data = response.json()
             results = data.get('results', []) 
         else:
-            print("API Error:", response.status_code)
+            error_message = f"API Error: {response.status_code}"
+            print(error_message)
+            return render(request, 'TVshow/TVshow_search.html', {'results': results, 'query': form_data, 'recently_viewed_shows': recently_viewed_shows, 'error_message': error_message})
 
     return render(request, 'TVshow/TVshow_search.html', {'results': results, 'query': form_data, 'recently_viewed_shows': recently_viewed_shows})
 
@@ -53,11 +56,12 @@ def show_detail(request, show_id):
     if show:
         show_data = {
             'id': show.show_id,
-            'name': show.name,
+            'name': show.title,
             'first_air_date': show.first_air_date,
             'overview': show.description,
             'poster_path': show.poster_url,
         }
+        cover_image_url = show.poster_url
     else:
 
         api_data = get_tv_show_from_api(show_id)
@@ -72,8 +76,9 @@ def show_detail(request, show_id):
             'overview': api_data.get('overview', 'Unavailable'),
             'poster_path': f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None,
         }
+        cover_image_url = show_data['poster_path']
 
-    cover_image_url=f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None
+    #cover_image_url=f"https://image.tmdb.org/t/p/w500{api_data.get('poster_path')}" if api_data.get('poster_path') else None
     add_to_recently_viewed(user, 'show', show_data['id'], show_data['name'], cover_image_url)
 
     return render(request, 'TVshow/show_detail.html', {'show': show_data})
@@ -161,6 +166,8 @@ def delete_show(request, show_id):
             show = get_object_or_404(TVshow, user=request.user, show_id=show_id)
             show.delete()
             return JsonResponse({'message': 'Show deleted successfully'}, status=200)
+        except Http404:
+            return JsonResponse({'error': 'Failed to delete show: Show matching query does not exist.'}, status=404)
         except Exception as e:
             return JsonResponse({'error': f'Failed to delete show: {str(e)}'}, status=500)
     else:
