@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.timezone import now
+from django.utils import timezone
+
 
 class Quote(models.Model):
     text = models.TextField()
@@ -22,3 +24,18 @@ class RecentlyViewed(models.Model):
     class Meta:
         ordering = ['-viewed_at']
         unique_together = ('user', 'content_type', 'item_id')
+
+class MediaItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=50)  
+    added_at = models.DateTimeField(default=timezone.now)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True  
+
+    def __str__(self):
+        return self.title
+
