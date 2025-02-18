@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 book_id: bookId,
                 title: "{{ book.volumeInfo.title|default:'' }}",
                 author: "{{ book.volumeInfo.authors|join:', '|default:'' }}",
+                description: "{{ book.volumeInfo.description|default:'' |escapejs }}",
                 genre: "{{ book.volumeInfo.categories|join:', '|default:'' }}",
                 status: status,
                 cover_image_url: coverImageUrl

@@ -117,16 +117,14 @@ def book_search(request):
 @login_required 
 def book_detail(request, book_id):
     user = request.user
-
     if book_id.startswith("user-"):
         try:    
-            book = UserBook.objects.get(book_id=book_id) 
+            book = UserBook.objects.get(book_id=book_id)
         except UserBook.DoesNotExist:
             raise Http404("User book not found")
 
-        # add_to_recently_viewed(user, 'book', book.id, book.title)
-
         return render(request, 'book/book_detail.html', {'book': book})
+
 
     response = requests.get(f"https://www.googleapis.com/books/v1/volumes/{book_id}")
     if response.status_code != 200:
@@ -138,7 +136,6 @@ def book_detail(request, book_id):
     add_to_recently_viewed(user, 'book', book_id, title, cover_image_url)
 
     return render(request, 'book/book_detail.html', {'book': book_data})
-
 
 
 
@@ -156,6 +153,9 @@ def add_to_list(request):
         genre = data.get('genre')
         cover_image_url = data.get('cover_image_url', None) or "default_url"
         cover_image_url = unescape(cover_image_url)
+        description = data.get('description', '')
+        description = unescape(description)
+
         if not book_id or not status:
             return JsonResponse({'error': 'Invalid data'}, status=400)
 
@@ -166,6 +166,7 @@ def add_to_list(request):
             book = UserBook.objects.get(user=request.user, book_id=book_id)
             book.status = status
             book.last_updated = now()
+            book.description = description
             book.save()
             message = 'Book status updated successfully'
         except UserBook.DoesNotExist:
@@ -177,6 +178,7 @@ def add_to_list(request):
                 status=status,
                 genre=genre,
                 cover_image_url=cover_image_url,
+                description=description,  
                 last_updated=now(),
             )
             message = 'Book added successfully'
