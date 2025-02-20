@@ -1199,10 +1199,58 @@
     </mxGraphModel>
   </diagram>
   <diagram id="xCdskPhR-wgKAdssDnU1" name="Deployment">
-    <mxGraphModel dx="1290" dy="591" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1290" dy="557" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-16" value="&lt;div&gt;:WebServer DB&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="530" y="252" width="210" height="139" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-2" value=":WebServer Interface&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="70" y="150" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-3" value="Django Templates;&lt;div&gt;HTML, CSS, JS&lt;/div&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-6" value="&lt;div&gt;API&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="414" y="80" width="180" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-8" value="GoogleBook API" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="420" y="120" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-9" value="TMDB" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="420" y="170" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-10" value="&lt;div&gt;:WebServer Backend&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="265" y="391" width="210" height="139" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-12" value="SQLite server" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="560" y="310" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-13" value="Python/Django" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="305" y="456" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-14" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0;exitY=0;exitDx=160;exitDy=105;exitPerimeter=0;entryX=0;entryY=0;entryDx=0;entryDy=100;entryPerimeter=0;" edge="1" parent="1" source="L_QEo_OUcRvUlGSZP-_C-2" target="L_QEo_OUcRvUlGSZP-_C-10">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="330" y="410" as="sourcePoint" />
+            <mxPoint x="490" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-15" value="&lt;div&gt;&amp;lt;&amp;lt;protocol&amp;gt;&amp;gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;JSON REST&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="250" y="310" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-17" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.02;exitY=0.256;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.013;entryY=0.84;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="L_QEo_OUcRvUlGSZP-_C-10" target="L_QEo_OUcRvUlGSZP-_C-6">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="175" y="320" as="sourcePoint" />
+            <mxPoint x="385" y="401" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L_QEo_OUcRvUlGSZP-_C-18" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0;exitY=0;exitDx=64.5;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=139;entryDy=110;entryPerimeter=0;" edge="1" parent="1" source="L_QEo_OUcRvUlGSZP-_C-10" target="L_QEo_OUcRvUlGSZP-_C-16">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="431" y="404" as="sourcePoint" />
+            <mxPoint x="453" y="232" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
