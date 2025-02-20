@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" version="26.0.15" pages="7">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" version="26.0.15" pages="8">
   <diagram name="Use Case" id="QlaU7q_y1abbO-n5D4bC">
     <mxGraphModel dx="1290" dy="557" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -978,9 +978,6 @@
         <mxCell id="kLg326uowqaJpmuVhhxP-16" value="Recently viewed" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="810" y="80" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kLg326uowqaJpmuVhhxP-17" value="User Interface" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="-200" y="185" width="560" height="120" as="geometry" />
-        </mxCell>
         <mxCell id="U_ZhIJkVeUVcoj1Tdljx-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;endArrow=circle;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="464" y="20" as="targetPoint" />
@@ -1167,13 +1164,13 @@
         </mxCell>
         <mxCell id="U_ZhIJkVeUVcoj1Tdljx-30" value="" style="endArrow=halfCircle;endFill=0;endSize=12;html=1;rounded=0;" edge="1" parent="1">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="35" y="255" as="sourcePoint" />
+            <mxPoint x="30" y="255" as="sourcePoint" />
             <mxPoint x="-10" y="254.5" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="U_ZhIJkVeUVcoj1Tdljx-31" value="" style="endArrow=circle;endFill=0;endSize=12;html=1;rounded=0;" edge="1" parent="1">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="100" y="254.5" as="sourcePoint" />
+            <mxPoint x="120" y="255" as="sourcePoint" />
             <mxPoint x="180" y="254.5" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -1198,6 +1195,14 @@
         <mxCell id="U_ZhIJkVeUVcoj1Tdljx-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.106;entryY=0.496;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;startFill=0;" edge="1" parent="1" source="kLg326uowqaJpmuVhhxP-15" target="kLg326uowqaJpmuVhhxP-16">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xCdskPhR-wgKAdssDnU1" name="Deployment">
+    <mxGraphModel dx="1290" dy="591" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
       </root>
     </mxGraphModel>
   </diagram>
