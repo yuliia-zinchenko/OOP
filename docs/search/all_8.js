@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['general_0',['general',['../namespacegeneral.html',1,'']]],
+  ['general_3a_3aadmin_1',['admin',['../namespacegeneral_1_1admin.html',1,'general']]],
+  ['general_3a_3aapps_2',['apps',['../namespacegeneral_1_1apps.html',1,'general']]],
+  ['general_3a_3amigrations_3',['migrations',['../namespacegeneral_1_1migrations.html',1,'general']]],
+  ['general_3a_3amigrations_3a_3a0001_5finitial_4',['0001_initial',['../namespacegeneral_1_1migrations_1_10001__initial.html',1,'general::migrations']]],
+  ['general_3a_3amodels_5',['models',['../namespacegeneral_1_1models.html',1,'general']]],
+  ['general_3a_3atasks_6',['tasks',['../namespacegeneral_1_1tasks.html',1,'general']]],
+  ['general_3a_3atests_7',['tests',['../namespacegeneral_1_1tests.html',1,'general']]],
+  ['general_3a_3autils_8',['utils',['../namespacegeneral_1_1utils.html',1,'general']]],
+  ['general_3a_3aviews_9',['views',['../namespacegeneral_1_1views.html',1,'general']]],
+  ['generalconfig_10',['GeneralConfig',['../classgeneral_1_1apps_1_1_general_config.html',1,'general::apps']]],
+  ['genre_11',['genre',['../classbook_1_1forms_1_1_manual_book_form.html#ade76fbcc3f9678a14b092f506d0c44e5',1,'book.forms.ManualBookForm.genre'],['../classbook_1_1models_1_1_user_book.html#ade76fbcc3f9678a14b092f506d0c44e5',1,'book.models.UserBook.genre']]],
+  ['get_5fauthor_5fbased_5frecommendations_12',['get_author_based_recommendations',['../namespacebook_1_1services.html#aa5526b0180ee66856ac6f0736c8e00df',1,'book::services']]],
+  ['get_5fauthor_5fbased_5frecommendations_5fwith_5fapi_13',['get_author_based_recommendations_with_api',['../namespacebook_1_1services.html#a7f24a9b33ccfcf7cb73ba4721d380802',1,'book::services']]],
+  ['get_5fbest_5fsellers_14',['get_best_sellers',['../namespacebook_1_1services.html#a46ecb88b13c84945fe04de0b0a9f8a62',1,'book::services']]],
+  ['get_5fbestsellers_5fwith_5fgoogle_5finfo_15',['get_bestsellers_with_google_info',['../namespacebook_1_1services.html#ab61737d43507dbdec05b1b9e8ce2b19e',1,'book::services']]],
+  ['get_5fbook_5finfo_5ffrom_5fgoogle_16',['get_book_info_from_google',['../namespacebook_1_1services.html#a9cf7e303b4429a01ba711e0763012802',1,'book::services']]],
+  ['get_5fdaily_5fquote_17',['get_daily_quote',['../namespacebook_1_1services.html#a6141e03149dee6153d2dea963b7ddf42',1,'book::services']]],
+  ['get_5fmovie_5ffrom_5fapi_18',['get_movie_from_api',['../namespacemovie_1_1services.html#a86899ef37ddd1856ac599f52ff202425',1,'movie::services']]],
+  ['get_5fmovies_5fby_5fgenre_19',['get_movies_by_genre',['../namespacemovie_1_1services.html#aa60e1268b6de1073042250bae73f6620',1,'movie::services']]],
+  ['get_5frecommendations_5ffrom_5fgoogle_5fbooks_20',['get_recommendations_from_google_books',['../namespacebook_1_1services.html#ae906542d2d2dce295694111b859485f8',1,'book::services']]],
+  ['get_5fseries_5fby_5fgenre_21',['get_series_by_genre',['../namespace_t_vshow_1_1services.html#a8379a1e022427aa6634687727f21d00d',1,'TVshow::services']]],
+  ['get_5ftop_5fgenres_22',['get_top_genres',['../namespacebook_1_1services.html#acd15fdc619c696f5d3b18dca1bd5a9c5',1,'book::services']]],
+  ['get_5ftv_5fshow_5ffrom_5fapi_23',['get_tv_show_from_api',['../namespace_t_vshow_1_1services.html#addc8c12c0f14428f93c52a660941fe97',1,'TVshow::services']]]
+];

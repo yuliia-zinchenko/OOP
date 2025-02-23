@@ -365,16 +365,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 
-# Ігнорувати всі файли в docs
-docs/*
 
-# Не ігнорувати необхідні файли
-!docs/index.html
-!docs/doxygen.css
-!docs/jquery.js
-
-# Не ігноруємо папки для стилів, зображень та інших скриптів
-!docs/**/*.css
-!docs/**/*.js
-!docs/**/*.png
-!docs/**/*.jpg
