@@ -1,4 +1,0 @@
-var dir_062a72cd9ca649485f8c4375aa23da56 =
-[
-    [ "0004_rename_cronjoblog_code_start_time_ran_at_time_django_cron_code_21f381_idx_and_more.py", "0004__rename__cronjoblog__code__start__time__ran__at__time__django__cron__code__21f381__idx__and__more_8py.html", "0004__rename__cronjoblog__code__start__time__ran__at__time__django__cron__code__21f381__idx__and__more_8py" ]
-];

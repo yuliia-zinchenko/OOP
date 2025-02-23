@@ -1,5 +1,0 @@
-var classpylint_1_1extensions_1_1consider__refactoring__into__while__condition_1_1_consider_refactor_into_while_condition_checker =
-[
-    [ "_check_breaking_after_while_true", "classpylint_1_1extensions_1_1consider__refactoring__into__while__condition_1_1_consider_refactor_into_while_condition_checker.html#ada8d1e96a7455266adc9ad899c8d3bce", null ],
-    [ "visit_while", "classpylint_1_1extensions_1_1consider__refactoring__into__while__condition_1_1_consider_refactor_into_while_condition_checker.html#acd819e92f789d838bf25a99041438954", null ]
-];

@@ -1,4 +1,0 @@
-var classpylint_1_1extensions_1_1consider__ternary__expression_1_1_consider_ternary_expression_checker =
-[
-    [ "visit_if", "classpylint_1_1extensions_1_1consider__ternary__expression_1_1_consider_ternary_expression_checker.html#a8aa859d89de950a659474a8235a27c62", null ]
-];

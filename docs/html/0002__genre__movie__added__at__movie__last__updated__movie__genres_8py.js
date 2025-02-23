@@ -1,4 +1,0 @@
-var 0002__genre__movie__added__at__movie__last__updated__movie__genres_8py =
-[
-    [ "movie.migrations.0002_genre_movie_added_at_movie_last_updated_movie_genres.Migration", "classmovie_1_1migrations_1_10002__genre__movie__added__at__movie__last__updated__movie__genres_1_1_migration.html", null ]
-];

@@ -1,4 +1,0 @@
-var 0007__remove__userbook__cover__image__userbook__cover__image__url__and__more_8py =
-[
-    [ "book.migrations.0007_remove_userbook_cover_image_userbook_cover_image_url_and_more.Migration", "classbook_1_1migrations_1_10007__remove__userbook__cover__image__userbook__cover__image__url__and__more_1_1_migration.html", null ]
-];
