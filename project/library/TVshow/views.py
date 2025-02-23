@@ -20,6 +20,15 @@ from general.utils import add_to_recently_viewed
 
 @login_required
 def TVshow_search(request):
+    """
+    @brief Handles the TV show search functionality.
+
+    This view allows users to search for TV shows based on a query. It retrieves results 
+    from an external API and displays them, along with the user's recently viewed shows.
+
+    @param request The HTTP request object.
+    @return Renders the TV show search page with search results and recent shows.
+    """
     results = []
     recently_viewed_shows = RecentlyViewed.objects.filter(user=request.user, content_type='show').order_by('-viewed_at')[:20]
     form_data = request.GET.get('query', '').strip() 
@@ -45,6 +54,16 @@ def TVshow_search(request):
 
 @login_required
 def show_detail(request, show_id):
+    """
+    @brief Displays the details of a specific TV show.
+
+    This view either retrieves TV show details from the database if the user has added 
+    it or fetches data from an external API. It also adds the show to the user's recently viewed list.
+
+    @param request The HTTP request object.
+    @param show_id The ID of the TV show.
+    @return Renders the show detail page with the TV show data.
+    """
     user = request.user
     show = None  
 
@@ -88,6 +107,15 @@ def show_detail(request, show_id):
 @login_required
 @csrf_exempt
 def add_or_update_show(request):
+    """
+    @brief Adds or updates a TV show for the user.
+
+    This view processes the incoming data for adding a new show or updating an existing 
+    show's status. It returns a JSON response indicating success or failure.
+
+    @param request The HTTP request object containing the show data.
+    @return JSON response with a success or error message.
+    """
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -131,6 +159,15 @@ def add_or_update_show(request):
 
 @login_required
 def show_main(request):
+    """
+    @brief Displays the main TV show page with a list of user's shows.
+
+    This view renders a list of TV shows that the user has added, with the option to 
+    filter by status and sort by title or date. It also includes a random quote for the day.
+
+    @param request The HTTP request object.
+    @return Renders the main page with the user's TV shows, sorted and filtered.
+    """
     user = request.user
 
     status = request.GET.get('status')
@@ -161,6 +198,16 @@ def show_main(request):
 
 @csrf_exempt
 def delete_show(request, show_id):
+    """
+    @brief Deletes a TV show for the user.
+
+    This view deletes a TV show from the user's list. It returns a JSON response 
+    indicating success or failure.
+
+    @param request The HTTP request object.
+    @param show_id The ID of the show to delete.
+    @return JSON response with a success or error message.
+    """
     if request.method == 'DELETE':
         try:
             show = get_object_or_404(TVshow, user=request.user, show_id=show_id)
@@ -176,6 +223,16 @@ def delete_show(request, show_id):
 
 @login_required
 def show_recommendations(request):
+    """
+    @brief Displays TV show recommendations based on genre and sorting options.
+
+    This view retrieves TV shows based on the selected genre and sort criteria, 
+    filtering out shows the user has already added to their list. The results are 
+    cached to improve performance.
+
+    @param request The HTTP request object containing the genre and sorting options.
+    @return Renders the recommendations page with a list of filtered TV shows.
+    """
     genre_id = request.GET.get('genre', '18') 
     sort_by = request.GET.get('sort_by', 'vote_average.desc')  
     page = int(request.GET.get('page', 1)) 

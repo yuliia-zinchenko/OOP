@@ -1,0 +1,28 @@
+var astroid_2exceptions_8py =
+[
+    [ "astroid.exceptions.AstroidError", "classastroid_1_1exceptions_1_1_astroid_error.html", "classastroid_1_1exceptions_1_1_astroid_error" ],
+    [ "astroid.exceptions.AstroidBuildingError", "classastroid_1_1exceptions_1_1_astroid_building_error.html", "classastroid_1_1exceptions_1_1_astroid_building_error" ],
+    [ "astroid.exceptions.AstroidImportError", "classastroid_1_1exceptions_1_1_astroid_import_error.html", null ],
+    [ "astroid.exceptions.TooManyLevelsError", "classastroid_1_1exceptions_1_1_too_many_levels_error.html", "classastroid_1_1exceptions_1_1_too_many_levels_error" ],
+    [ "astroid.exceptions.AstroidSyntaxError", "classastroid_1_1exceptions_1_1_astroid_syntax_error.html", "classastroid_1_1exceptions_1_1_astroid_syntax_error" ],
+    [ "astroid.exceptions.NoDefault", "classastroid_1_1exceptions_1_1_no_default.html", "classastroid_1_1exceptions_1_1_no_default" ],
+    [ "astroid.exceptions.ResolveError", "classastroid_1_1exceptions_1_1_resolve_error.html", "classastroid_1_1exceptions_1_1_resolve_error" ],
+    [ "astroid.exceptions.MroError", "classastroid_1_1exceptions_1_1_mro_error.html", "classastroid_1_1exceptions_1_1_mro_error" ],
+    [ "astroid.exceptions.DuplicateBasesError", "classastroid_1_1exceptions_1_1_duplicate_bases_error.html", null ],
+    [ "astroid.exceptions.InconsistentMroError", "classastroid_1_1exceptions_1_1_inconsistent_mro_error.html", null ],
+    [ "astroid.exceptions.SuperError", "classastroid_1_1exceptions_1_1_super_error.html", "classastroid_1_1exceptions_1_1_super_error" ],
+    [ "astroid.exceptions.InferenceError", "classastroid_1_1exceptions_1_1_inference_error.html", "classastroid_1_1exceptions_1_1_inference_error" ],
+    [ "astroid.exceptions.NameInferenceError", "classastroid_1_1exceptions_1_1_name_inference_error.html", "classastroid_1_1exceptions_1_1_name_inference_error" ],
+    [ "astroid.exceptions.AttributeInferenceError", "classastroid_1_1exceptions_1_1_attribute_inference_error.html", "classastroid_1_1exceptions_1_1_attribute_inference_error" ],
+    [ "astroid.exceptions.UseInferenceDefault", "classastroid_1_1exceptions_1_1_use_inference_default.html", null ],
+    [ "astroid.exceptions._NonDeducibleTypeHierarchy", "classastroid_1_1exceptions_1_1___non_deducible_type_hierarchy.html", null ],
+    [ "astroid.exceptions.AstroidIndexError", "classastroid_1_1exceptions_1_1_astroid_index_error.html", "classastroid_1_1exceptions_1_1_astroid_index_error" ],
+    [ "astroid.exceptions.AstroidTypeError", "classastroid_1_1exceptions_1_1_astroid_type_error.html", "classastroid_1_1exceptions_1_1_astroid_type_error" ],
+    [ "astroid.exceptions.AstroidValueError", "classastroid_1_1exceptions_1_1_astroid_value_error.html", null ],
+    [ "astroid.exceptions.InferenceOverwriteError", "classastroid_1_1exceptions_1_1_inference_overwrite_error.html", null ],
+    [ "astroid.exceptions.ParentMissingError", "classastroid_1_1exceptions_1_1_parent_missing_error.html", "classastroid_1_1exceptions_1_1_parent_missing_error" ],
+    [ "astroid.exceptions.StatementMissing", "classastroid_1_1exceptions_1_1_statement_missing.html", "classastroid_1_1exceptions_1_1_statement_missing" ],
+    [ "astroid.exceptions.NotFoundError", "namespaceastroid_1_1exceptions.html#ac8eae381ef36852375ca0d0a518a08e3", null ],
+    [ "astroid.exceptions.SuperArgumentTypeError", "namespaceastroid_1_1exceptions.html#a9e5c38d51247c7dfe921c092cd2ab373", null ],
+    [ "astroid.exceptions.UnresolvableName", "namespaceastroid_1_1exceptions.html#a39a05dd1e801d2fdb01fbf0a6d605efa", null ]
+];

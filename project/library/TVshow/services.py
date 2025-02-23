@@ -4,6 +4,20 @@ import requests
 import datetime
 
 def get_tv_show_from_api(show_id):
+    """
+        @brief Fetches TV show details from TMDB API.
+
+        This function queries TMDB API using the given TV show title and retrieves
+        information such as season count, first air date, genres, and poster image.
+    
+        @param title The title of the TV show to search for.
+        @return A JSON string containing TV show details.
+    
+        @note Requires an active internet connection.
+        @warning API key must be correctly set up.
+        @warning API rate limits may apply.
+    """
+
     load_dotenv()
     api_key = os.getenv('SHOW_API_KEY')
     url = f"https://api.themoviedb.org/3/tv/{show_id}"

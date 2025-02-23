@@ -1,0 +1,5 @@
+var namespacepylint_1_1extensions_1_1consider__refactoring__into__while__condition =
+[
+    [ "ConsiderRefactorIntoWhileConditionChecker", "classpylint_1_1extensions_1_1consider__refactoring__into__while__condition_1_1_consider_refactor_into_while_condition_checker.html", "classpylint_1_1extensions_1_1consider__refactoring__into__while__condition_1_1_consider_refactor_into_while_condition_checker" ],
+    [ "register", "namespacepylint_1_1extensions_1_1consider__refactoring__into__while__condition.html#a25f83b3d2dba9f2149b9de5321b70657", null ]
+];

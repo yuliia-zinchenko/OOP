@@ -1,0 +1,4 @@
+var 0004__rename__cronjoblog__code__start__time__ran__at__time__django__cron__code__21f381__idx__and__more_8py =
+[
+    [ "0004_rename_cronjoblog_code_start_time_ran_at_time_django_cron_code_21f381_idx_and_more.Migration", "class0004__rename__cronjoblog__code__start__time__ran__at__time__django__cron__code__21f381__idx__and__more_1_1_migration.html", null ]
+];

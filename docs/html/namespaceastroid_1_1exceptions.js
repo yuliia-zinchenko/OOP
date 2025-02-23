@@ -1,0 +1,28 @@
+var namespaceastroid_1_1exceptions =
+[
+    [ "_NonDeducibleTypeHierarchy", "classastroid_1_1exceptions_1_1___non_deducible_type_hierarchy.html", null ],
+    [ "AstroidBuildingError", "classastroid_1_1exceptions_1_1_astroid_building_error.html", "classastroid_1_1exceptions_1_1_astroid_building_error" ],
+    [ "AstroidError", "classastroid_1_1exceptions_1_1_astroid_error.html", "classastroid_1_1exceptions_1_1_astroid_error" ],
+    [ "AstroidImportError", "classastroid_1_1exceptions_1_1_astroid_import_error.html", null ],
+    [ "AstroidIndexError", "classastroid_1_1exceptions_1_1_astroid_index_error.html", "classastroid_1_1exceptions_1_1_astroid_index_error" ],
+    [ "AstroidSyntaxError", "classastroid_1_1exceptions_1_1_astroid_syntax_error.html", "classastroid_1_1exceptions_1_1_astroid_syntax_error" ],
+    [ "AstroidTypeError", "classastroid_1_1exceptions_1_1_astroid_type_error.html", "classastroid_1_1exceptions_1_1_astroid_type_error" ],
+    [ "AstroidValueError", "classastroid_1_1exceptions_1_1_astroid_value_error.html", null ],
+    [ "AttributeInferenceError", "classastroid_1_1exceptions_1_1_attribute_inference_error.html", "classastroid_1_1exceptions_1_1_attribute_inference_error" ],
+    [ "DuplicateBasesError", "classastroid_1_1exceptions_1_1_duplicate_bases_error.html", null ],
+    [ "InconsistentMroError", "classastroid_1_1exceptions_1_1_inconsistent_mro_error.html", null ],
+    [ "InferenceError", "classastroid_1_1exceptions_1_1_inference_error.html", "classastroid_1_1exceptions_1_1_inference_error" ],
+    [ "InferenceOverwriteError", "classastroid_1_1exceptions_1_1_inference_overwrite_error.html", null ],
+    [ "MroError", "classastroid_1_1exceptions_1_1_mro_error.html", "classastroid_1_1exceptions_1_1_mro_error" ],
+    [ "NameInferenceError", "classastroid_1_1exceptions_1_1_name_inference_error.html", "classastroid_1_1exceptions_1_1_name_inference_error" ],
+    [ "NoDefault", "classastroid_1_1exceptions_1_1_no_default.html", "classastroid_1_1exceptions_1_1_no_default" ],
+    [ "ParentMissingError", "classastroid_1_1exceptions_1_1_parent_missing_error.html", "classastroid_1_1exceptions_1_1_parent_missing_error" ],
+    [ "ResolveError", "classastroid_1_1exceptions_1_1_resolve_error.html", "classastroid_1_1exceptions_1_1_resolve_error" ],
+    [ "StatementMissing", "classastroid_1_1exceptions_1_1_statement_missing.html", "classastroid_1_1exceptions_1_1_statement_missing" ],
+    [ "SuperError", "classastroid_1_1exceptions_1_1_super_error.html", "classastroid_1_1exceptions_1_1_super_error" ],
+    [ "TooManyLevelsError", "classastroid_1_1exceptions_1_1_too_many_levels_error.html", "classastroid_1_1exceptions_1_1_too_many_levels_error" ],
+    [ "UseInferenceDefault", "classastroid_1_1exceptions_1_1_use_inference_default.html", null ],
+    [ "NotFoundError", "namespaceastroid_1_1exceptions.html#ac8eae381ef36852375ca0d0a518a08e3", null ],
+    [ "SuperArgumentTypeError", "namespaceastroid_1_1exceptions.html#a9e5c38d51247c7dfe921c092cd2ab373", null ],
+    [ "UnresolvableName", "namespaceastroid_1_1exceptions.html#a39a05dd1e801d2fdb01fbf0a6d605efa", null ]
+];

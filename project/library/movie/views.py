@@ -19,6 +19,15 @@ from general.utils import add_to_recently_viewed
 
 @login_required
 def movie_search(request):
+    """
+    @brief Handles the movie search functionality.
+
+    This view allows users to search for movies based on a query. It retrieves results 
+    from an external API and displays them, along with the user's recently viewed movies.
+
+    @param request The HTTP request object.
+    @return Renders the movie search page with search results and recent movies.
+    """
     results = []
     recently_viewed_movies = RecentlyViewed.objects.filter(user=request.user, content_type='movie').order_by('-viewed_at')[:20]
     form_data = request.GET.get('query', '')  
@@ -43,6 +52,16 @@ def movie_search(request):
 
 @login_required
 def movie_detail(request, movie_id):
+    """
+    @brief Displays the details of a specific movie.
+
+    This view either retrieves movie details from the database if the user has added 
+    it or fetches data from an external API. It also adds the movie to the user's recently viewed list.
+
+    @param request The HTTP request object.
+    @param movie_id The ID of the movie.
+    @return Renders the movie detail page with the movie data.
+    """
     user = request.user
     movie = Movie.objects.filter(user=request.user, movie_id=movie_id).first()
 
@@ -77,6 +96,15 @@ def movie_detail(request, movie_id):
 @login_required
 @csrf_exempt
 def add_or_update_movie(request):
+    """
+    @brief Adds or updates a movie for the user.
+
+    This view processes the incoming data for adding a new movie or updating an existing 
+    movie's status. It returns a JSON response indicating success or failure.
+
+    @param request The HTTP request object containing the movie data.
+    @return JSON response with a success or error message.
+    """
     if request.method == 'POST':
         try:
 
@@ -121,6 +149,15 @@ def add_or_update_movie(request):
 
 @login_required
 def movie_main(request):
+    """
+    @brief Displays the main movie page with a list of user's movies.
+
+    This view renders a list of movies that the user has added, with the option to 
+    filter by status and sort by title or date. It also includes a random quote for the day.
+
+    @param request The HTTP request object.
+    @return Renders the main page with the user's movies, sorted and filtered.
+    """
     user = request.user
 
     status = request.GET.get('status')
@@ -151,6 +188,16 @@ def movie_main(request):
 
 
 def delete_movie(request, movie_id):
+    """
+    @brief Deletes a movie for the user.
+
+    This view deletes a movie from the user's list. It returns a JSON response 
+    indicating success or failure.
+
+    @param request The HTTP request object.
+    @param movie_id The ID of the movie to delete.
+    @return JSON response with a success or error message.
+    """
     if request.method == 'DELETE':
         movie = get_object_or_404(Movie, user=request.user, movie_id=movie_id)
 
@@ -163,6 +210,16 @@ def delete_movie(request, movie_id):
 
 @login_required
 def movie_recommendations(request):
+    """
+    @brief Displays movie recommendations based on genre and sorting options.
+
+    This view retrieves movies based on the selected genre and sort criteria, 
+    filtering out movies the user has already added to their list. The results are 
+    cached to improve performance.
+
+    @param request The HTTP request object containing the genre and sorting options.
+    @return Renders the recommendations page with a list of filtered movies.
+    """
     genre_id = request.GET.get('genre', '28')  
     sort_by = request.GET.get('sort_by', 'vote_average.desc') 
     page = int(request.GET.get('page', 1))  

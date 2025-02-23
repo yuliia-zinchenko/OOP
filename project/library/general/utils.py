@@ -3,6 +3,14 @@ from django.db import transaction
 
 @transaction.atomic
 def add_to_recently_viewed(user, content_type, item_id, title, cover_image_url=None):
+    """
+    Adds a media item to the user's recently viewed list.
+    
+    :param user: The user who viewed the item.
+    :type user: User
+    :param item: The media item that was viewed.
+    :type item: UserBook, Movie, or TVShow
+    """
     if RecentlyViewed.objects.filter(user=user, content_type=content_type, item_id=item_id).exists():
         return  
 

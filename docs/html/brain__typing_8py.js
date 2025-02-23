@@ -1,0 +1,27 @@
+var brain__typing_8py =
+[
+    [ "astroid.brain.brain_typing._forbid_class_getitem_access", "namespaceastroid_1_1brain_1_1brain__typing.html#a119f71db76adc198f9b8f0da07cfaebe", null ],
+    [ "astroid.brain.brain_typing._looks_like_generic_class_pep695", "namespaceastroid_1_1brain_1_1brain__typing.html#a80245bc8c76a7ad75d05f9930d13924c", null ],
+    [ "astroid.brain.brain_typing._looks_like_special_alias", "namespaceastroid_1_1brain_1_1brain__typing.html#a79d74ddd43328b3ee41901d192e6cf78", null ],
+    [ "astroid.brain.brain_typing._looks_like_typedDict", "namespaceastroid_1_1brain_1_1brain__typing.html#abb700d25f37cce6245f620b30d520cc7", null ],
+    [ "astroid.brain.brain_typing._looks_like_typing_alias", "namespaceastroid_1_1brain_1_1brain__typing.html#a160fec1906c5029cc6a616c830c76db9", null ],
+    [ "astroid.brain.brain_typing._looks_like_typing_cast", "namespaceastroid_1_1brain_1_1brain__typing.html#ada19793e12921b31ff74c2ed8df2c067", null ],
+    [ "astroid.brain.brain_typing._looks_like_typing_subscript", "namespaceastroid_1_1brain_1_1brain__typing.html#a3ee02b92c39985b1e7404797067938d0", null ],
+    [ "astroid.brain.brain_typing._typing_transform", "namespaceastroid_1_1brain_1_1brain__typing.html#a99d78be3f3af20b1e4b585fc320b4567", null ],
+    [ "astroid.brain.brain_typing.infer_special_alias", "namespaceastroid_1_1brain_1_1brain__typing.html#a79ff822627cfddf227ff833d2278e309", null ],
+    [ "astroid.brain.brain_typing.infer_typedDict", "namespaceastroid_1_1brain_1_1brain__typing.html#ac8b2eaa586cc5b5fb706fca1e7183b0c", null ],
+    [ "astroid.brain.brain_typing.infer_typing_alias", "namespaceastroid_1_1brain_1_1brain__typing.html#a105be5f5d5d6ca130a54c8418dc861f9", null ],
+    [ "astroid.brain.brain_typing.infer_typing_attr", "namespaceastroid_1_1brain_1_1brain__typing.html#af9f1a3decd11d130be6f946b428fd526", null ],
+    [ "astroid.brain.brain_typing.infer_typing_cast", "namespaceastroid_1_1brain_1_1brain__typing.html#a7b914f6578ae182851827db088802eb8", null ],
+    [ "astroid.brain.brain_typing.infer_typing_generic_class_pep695", "namespaceastroid_1_1brain_1_1brain__typing.html#a30e6854e4c08af804a125466448d646a", null ],
+    [ "astroid.brain.brain_typing.infer_typing_typevar_or_newtype", "namespaceastroid_1_1brain_1_1brain__typing.html#a4283e0c342303b56ea72a677487eea09", null ],
+    [ "astroid.brain.brain_typing.looks_like_typing_typevar_or_newtype", "namespaceastroid_1_1brain_1_1brain__typing.html#ad0a505cec30f1231a1b242d029c12ebe", null ],
+    [ "astroid.brain.brain_typing.register", "namespaceastroid_1_1brain_1_1brain__typing.html#ace11a6d57aa1c016740edad3709bae49", null ],
+    [ "astroid.brain.brain_typing.CLASS_GETITEM_TEMPLATE", "namespaceastroid_1_1brain_1_1brain__typing.html#a9a63aaf7bd44eabb96d409020bf553f2", null ],
+    [ "astroid.brain.brain_typing.TYPING_ALIAS", "namespaceastroid_1_1brain_1_1brain__typing.html#ae9a55ea90789d50ba4879c9f6a9c7851", null ],
+    [ "astroid.brain.brain_typing.TYPING_MEMBERS", "namespaceastroid_1_1brain_1_1brain__typing.html#ab300165dc87e186e5fc80517f0ff47b3", null ],
+    [ "astroid.brain.brain_typing.TYPING_TYPE_TEMPLATE", "namespaceastroid_1_1brain_1_1brain__typing.html#ac2883c33a325be3dfef46c7f126e9e2d", null ],
+    [ "astroid.brain.brain_typing.TYPING_TYPEDDICT_QUALIFIED", "namespaceastroid_1_1brain_1_1brain__typing.html#a255046456b7516b00f7cf7133089ab5a", null ],
+    [ "astroid.brain.brain_typing.TYPING_TYPEVARS", "namespaceastroid_1_1brain_1_1brain__typing.html#aa9deb7838445070160962d98b0d9423a", null ],
+    [ "astroid.brain.brain_typing.TYPING_TYPEVARS_QUALIFIED", "namespaceastroid_1_1brain_1_1brain__typing.html#a9d37c138427fcd6ea2444d1444ff5468", null ]
+];

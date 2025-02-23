@@ -25,6 +25,15 @@ from general.utils import add_to_recently_viewed
 
 @login_required
 def index(request):
+    """
+    @brief Handles the main page view for the user's library.
+
+    This view fetches the user's books, movies, and TV shows and allows for search and filtering based on status and title.
+    Additionally, it displays a random quote of the day if available.
+
+    @param request The HTTP request object.
+    @return Renders the main page template with the user's library data and filters applied.
+    """
     user = request.user
     query = request.GET.get('q', '').strip()  
     sort_by = request.GET.get('sort_by', 'date')  
@@ -84,6 +93,15 @@ def index(request):
 
 @login_required
 def book_search(request):
+    """
+    @brief Handles the book search functionality.
+
+    This view allows the user to search for books based on the selected search criteria (e.g., title, author).
+    It integrates with the Google Books API to fetch external book data based on the search query.
+
+    @param request The HTTP request object.
+    @return Renders the book search page with the search form and the search results.
+    """
     results = []
     recently_viewed_books = RecentlyViewed.objects.filter(user=request.user, content_type='book').order_by('-viewed_at')[:20]
     form = BookSearchForm(request.GET)
@@ -116,6 +134,15 @@ def book_search(request):
 
 @login_required 
 def book_detail(request, book_id):
+    """
+    @brief Displays the detailed page of a book.
+
+    This view fetches the details of a specific book, either from the user's collection or the Google Books API.
+
+    @param request The HTTP request object.
+    @param book_id The unique identifier for the book.
+    @return Renders the book detail page with detailed information about the book.
+    """
     user = request.user
     if book_id.startswith("user-"):
         try:    
@@ -143,6 +170,14 @@ def book_detail(request, book_id):
 @login_required
 @csrf_exempt
 def add_to_list(request):
+    """
+    @brief Adds or updates a book in the user's library.
+
+    This view allows the user to add a book to their collection or update its status if it's already in the library.
+
+    @param request The HTTP request object.
+    @return A JSON response indicating the success or failure of the operation.
+    """
     if request.method == "POST" and request.user.is_authenticated:
         data = json.loads(request.body)
         book_id = data.get('book_id')
@@ -188,6 +223,15 @@ def add_to_list(request):
     return JsonResponse({'error': 'Unauthorized or invalid request'}, status=403)
 
 def update_status(request, book_id):
+    """
+    @brief Updates the status of a book in the user's collection.
+
+    This view allows the user to change the status of a book.
+
+    @param request The HTTP request object.
+    @param book_id The unique identifier for the book.
+    @return A JSON response with the updated status.
+    """
     if request.method == "POST":
         data = json.loads(request.body)
         book_id = data['book_id']
@@ -210,6 +254,15 @@ def update_status(request, book_id):
 
 
 def delete_book(request, book_id):
+    """
+    @brief Deletes a book from the user's collection.
+
+    This view removes a book from the user's library.
+
+    @param request The HTTP request object.
+    @param book_id The unique identifier for the book.
+    @return A JSON response indicating success or failure of the deletion.
+    """
     if request.method == 'DELETE':
         book = get_object_or_404(UserBook, user=request.user, book_id=book_id)
 
@@ -223,6 +276,14 @@ def delete_book(request, book_id):
 
 
 def manual_book_add(request):
+    """
+    @brief Manually adds a book to the user's library.
+
+    This view allows the user to manually enter details for a book to add to their library.
+
+    @param request The HTTP request object.
+    @return Renders the book index page with the form or redirects after a successful add.
+    """
     if request.method == "POST":
         form = ManualBookForm(request.POST)
         if form.is_valid():
@@ -253,6 +314,14 @@ def manual_book_add(request):
     return render(request, 'book/index.html', {'form': form})
 
 def recommendations(request):
+    """
+    @brief Displays book recommendations for the user.
+
+    This view suggests books based on the user's genre preferences and past behavior.
+
+    @param request The HTTP request object.
+    @return Renders the recommendations page with the suggested books.
+    """
     user = request.user
 
     top_genres = get_top_genres(user)

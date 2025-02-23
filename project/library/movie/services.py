@@ -5,6 +5,19 @@ import datetime
 
 
 def get_movie_from_api(movie_id):
+    """
+    @brief Fetches movie details from TMDB API.
+    
+    This function queries The Movie Database (TMDB) API using the given movie title.
+    It retrieves details such as release date, genres, rating, and poster image URL.
+    
+    @param title The title of the movie to search for.
+    @return A JSON string containing movie details.
+    
+    @note Requires an active internet connection.
+    @warning Ensure the TMDB API key is configured correctly.
+    @warning API rate limits may apply, depending on the request frequency.
+    """
     load_dotenv()
     api_key = os.getenv('TMDB_API_KEY')  
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=en-US"

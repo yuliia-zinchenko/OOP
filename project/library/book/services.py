@@ -82,6 +82,18 @@ def get_best_sellers():
         return []
     
 def get_book_info_from_google(title):
+    """
+    @brief Fetches book details from Google Books API.
+    
+    This function sends a request to Google Books API using the provided book title
+    and retrieves information such as author, description, and cover image.
+    
+    @param title The title of the book to search for.
+    @return A JSON string containing book details.
+    
+    @note Requires an active internet connection.
+    @warning API rate limits may apply.
+    """
     api_key = os.getenv('api_key')
     url = f"https://www.googleapis.com/books/v1/volumes"
     
