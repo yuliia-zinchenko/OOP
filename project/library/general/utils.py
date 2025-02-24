@@ -1,6 +1,8 @@
 from .models import RecentlyViewed
 from django.db import transaction
 
+from django.db import transaction
+
 @transaction.atomic
 def add_to_recently_viewed(user, content_type, item_id, title, cover_image_url=None):
     """
@@ -8,28 +10,31 @@ def add_to_recently_viewed(user, content_type, item_id, title, cover_image_url=N
     
     :param user: The user who viewed the item.
     :type user: User
-    :param item: The media item that was viewed.
-    :type item: UserBook, Movie, or TVShow
+    :param content_type: The type of media (e.g., book, movie, TV show).
+    :type content_type: str
+    :param item_id: The unique ID of the media item.
+    :type item_id: int
+    :param title: The title of the media item.
+    :type title: str
+    :param cover_image_url: Optional cover image URL.
+    :type cover_image_url: str or None
     """
-    if RecentlyViewed.objects.filter(user=user, content_type=content_type, item_id=item_id).exists():
-        return  
 
-   
-    RecentlyViewed.objects.create(
-        user=user,
-        content_type=content_type,
-        item_id=item_id,
-        title=title,
-        cover_image_url=cover_image_url,
+    obj, created = RecentlyViewed.objects.update_or_create(
+        user=user, content_type=content_type, item_id=item_id,
+        defaults={"title": title, "cover_image_url": cover_image_url}
     )
 
 
-    records = RecentlyViewed.objects.filter(user=user, content_type=content_type).order_by('-viewed_at')
-    if records.count() > 6:
+    if created:
+        excess_records = RecentlyViewed.objects.filter(
+            user=user, content_type=content_type
+        ).order_by('-viewed_at')[6:]
 
-        excess_records = records[6:]
-        for record in excess_records:
-            record.delete()
+
+        if excess_records.exists():
+            excess_records.delete()
+
 
 
 def clean_recently_viewed():
